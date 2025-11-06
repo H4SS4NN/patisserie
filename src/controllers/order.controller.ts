@@ -34,7 +34,7 @@ export class OrderController {
           
           // Si PayPal échoue, on retourne quand même la commande mais avec une erreur PayPal
           // L'admin pourra changer le mode de paiement en CASH si nécessaire
-          return res.status(201).json({
+          res.status(201).json({
             success: true,
             order: {
               id: order.id,
@@ -47,6 +47,7 @@ export class OrderController {
             payment: null,
             paypalError: paypalError.response?.error_description || paypalError.message || 'PayPal authentication failed. Please configure PayPal credentials or use CASH payment.',
           });
+          return;
         }
       }
 

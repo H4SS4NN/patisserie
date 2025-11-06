@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Base de données MySQL
   db:
@@ -14,8 +12,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    ports:
-      - "127.0.0.1:3306:3306"  # Seulement accessible localement
+    # Port non exposé vers l'hôte - accessible uniquement via le réseau Docker
     networks:
       - patisserie-network
     healthcheck:
@@ -82,9 +79,9 @@ services:
       - backend
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_API_URL: ${FRONTEND_URL:-http://localhost:3000}
+      NEXT_PUBLIC_API_URL: ${APP_URL:-http://localhost:3000}
     ports:
-      - "127.0.0.1:3001:3000"  # Seulement accessible localement (via Nginx)
+      - "127.0.0.1:3001:3001"  # Frontend sur port 3001
     networks:
       - patisserie-network
 

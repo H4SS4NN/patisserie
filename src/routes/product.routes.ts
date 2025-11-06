@@ -8,20 +8,21 @@ import {
 
 const router = Router();
 
-// Public routes
+// Public routes (when mounted at /products)
 router.get('/', ProductController.getProducts);
 router.get('/:id', ProductController.getProductById);
 
-// Admin routes
+// Admin routes (when mounted at /admin/products)
+// These will be: POST /admin/products, PATCH /admin/products/:id, DELETE /admin/products/:id
 router.post(
-  '/admin/products',
+  '/',
   authenticateToken,
   requireAdmin,
   validate(createProductValidation),
   ProductController.createProduct
 );
-router.patch('/admin/products/:id', authenticateToken, requireAdmin, ProductController.updateProduct);
-router.delete('/admin/products/:id', authenticateToken, requireAdmin, ProductController.deleteProduct);
+router.patch('/:id', authenticateToken, requireAdmin, ProductController.updateProduct);
+router.delete('/:id', authenticateToken, requireAdmin, ProductController.deleteProduct);
 
 export default router;
 

@@ -8,6 +8,7 @@ import authRoutes from './routes/auth.routes';
 import orderRoutes from './routes/order.routes';
 import productRoutes from './routes/product.routes';
 import webhookRoutes from './routes/webhook.routes';
+import { authenticateToken, requireAdmin } from './middlewares/auth.middleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 
@@ -72,9 +73,11 @@ app.get('/health', (req, res) => {
 });
 
 // Routes
-app.use('/admin', authRoutes); // Admin authentication routes
-app.use('/orders', orderRoutes);
-app.use('/products', productRoutes);
+app.use('/admin', authRoutes); // Admin authentication routes (/admin/login, etc.)
+app.use('/admin/orders', orderRoutes); // Admin order management (auth checked in routes)
+app.use('/admin/products', productRoutes); // Admin product management (auth checked in routes)
+app.use('/orders', orderRoutes); // Public order creation
+app.use('/products', productRoutes); // Public product listing
 app.use('/webhooks', webhookRoutes);
 
 // Error handling middleware

@@ -8,10 +8,10 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000',
   },
-  // Optimiser le chargement des CSS
-  experimental: {
-    optimizeCss: true,
-  },
+  // Optimisation CSS désactivée pour le build Docker
+  // experimental: {
+  //   optimizeCss: true,
+  // },
   // Ignorer les avertissements de preload CSS (non critiques)
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,

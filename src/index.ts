@@ -47,6 +47,8 @@ const swaggerOptions = {
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 // Middleware
+// Enable trust proxy for rate limiting behind Nginx
+app.set('trust proxy', 1);
 app.use(helmet());
 app.use(
   cors({
@@ -70,7 +72,7 @@ app.get('/health', (req, res) => {
 });
 
 // Routes
-app.use('/auth', authRoutes);
+app.use('/admin', authRoutes); // Admin authentication routes
 app.use('/orders', orderRoutes);
 app.use('/products', productRoutes);
 app.use('/webhooks', webhookRoutes);

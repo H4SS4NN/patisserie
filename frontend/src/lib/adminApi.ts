@@ -84,7 +84,7 @@ export const getOrders = async (filters: {
     if (filters.end_date) params.append('date_to', filters.end_date);
 
     const response = await adminApi.get<{ orders: Order[] }>(
-      `/orders/admin/orders?${params.toString()}`
+      `/admin/orders?${params.toString()}`
     );
     return response.data.orders || [];
   } catch (error) {
@@ -95,7 +95,7 @@ export const getOrders = async (filters: {
 
 export const getOrderById = async (id: number | string): Promise<Order> => {
   try {
-    const response = await adminApi.get<{ order: Order }>(`/orders/admin/orders/${id}`);
+    const response = await adminApi.get<{ order: Order }>(`/admin/orders/${id}`);
     return response.data.order;
   } catch (error) {
     console.error('Error fetching order:', error);
@@ -110,7 +110,7 @@ export const updateOrderStatus = async (
 ): Promise<Order> => {
   try {
     const response = await adminApi.patch<{ order: Order }>(
-      `/orders/admin/orders/${id}/status`,
+      `/admin/orders/${id}/status`,
       {
         status,
         notes,
@@ -130,7 +130,7 @@ export const updatePaymentStatus = async (
 ): Promise<Order> => {
   try {
     const response = await adminApi.patch<{ order: Order }>(
-      `/orders/admin/orders/${id}/payment`,
+      `/admin/orders/${id}/payment`,
       {
         payment_status,
         paypal_payment_id,
@@ -167,7 +167,7 @@ export const getProductById = async (id: string): Promise<Product> => {
 export const createProduct = async (productData: Partial<Product>): Promise<Product> => {
   try {
     const response = await adminApi.post<{ success: boolean; product: Product }>(
-      '/products/admin/products',
+      '/admin/products',
       productData
     );
     return response.data.product;
@@ -183,7 +183,7 @@ export const updateProduct = async (
 ): Promise<Product> => {
   try {
     const response = await adminApi.patch<{ success: boolean; product: Product }>(
-      `/products/admin/products/${id}`,
+      `/admin/products/${id}`,
       productData
     );
     return response.data.product;
@@ -195,7 +195,7 @@ export const updateProduct = async (
 
 export const deleteProduct = async (id: string): Promise<void> => {
   try {
-    await adminApi.delete(`/products/admin/products/${id}`);
+    await adminApi.delete(`/admin/products/${id}`);
   } catch (error) {
     console.error('Error deleting product:', error);
     throw error;
@@ -205,7 +205,7 @@ export const deleteProduct = async (id: string): Promise<void> => {
 // Stats
 export const getStats = async (): Promise<any> => {
   try {
-    const response = await adminApi.get('/orders/admin/stats');
+    const response = await adminApi.get('/admin/orders/stats');
     return response.data;
   } catch (error) {
     console.error('Error fetching stats:', error);
@@ -224,7 +224,7 @@ export const getCalendar = async (
     if (endDate) params.append('end_date', endDate);
 
     const response = await adminApi.get<{ orders: Order[] }>(
-      `/orders/admin/calendar?${params.toString()}`
+      `/admin/orders/calendar?${params.toString()}`
     );
     return response.data.orders || [];
   } catch (error) {

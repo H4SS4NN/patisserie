@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { Product, Order, ApiResponse } from '@/types';
 
-// Utiliser une URL relative en production pour que Nginx gère le routing
+// Utiliser /api comme préfixe pour que Nginx route vers le backend
 const API_BASE_URL = typeof window !== 'undefined' 
-  ? '' // Utiliser le même domaine en production (via Nginx)
+  ? '/api' // Préfixe API pour le routing Nginx
   : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const api = axios.create({

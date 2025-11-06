@@ -1,0 +1,524 @@
+{
+  "info": {
+    "name": "Patisserie API",
+    "description": "Collection complète pour l'API de gestion de commandes pâtisserie",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.token) {",
+                  "        pm.collectionVariables.set('token', jsonData.token);",
+                  "    }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Verify 2FA",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"user-id-here\",\n  \"token\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/2fa/verify",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "2fa", "verify"]
+            }
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Setup 2FA",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/2fa/setup",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "2fa", "setup"]
+            }
+          }
+        },
+        {
+          "name": "Enable 2FA",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"secret\": \"base32-secret\",\n  \"token\": \"123456\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/2fa/enable",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "2fa", "enable"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"]
+            }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "product-uuid"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Product (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Fraisier 6 parts\",\n  \"description\": \"Délicieux fraisier avec fraises fraîches\",\n  \"price\": 4500,\n  \"options\": {\n    \"taille\": \"6 parts\",\n    \"deco\": \"standard\"\n  },\n  \"image_url\": \"https://example.com/fraisier.jpg\",\n  \"available\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/admin/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "admin", "products"]
+            }
+          }
+        },
+        {
+          "name": "Update Product (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Fraisier 8 parts\",\n  \"price\": 5500,\n  \"available\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/products/admin/products/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "admin", "products", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "product-uuid"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Product (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/admin/products/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "admin", "products", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "product-uuid"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order (CASH)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_name\": \"Sami Dupont\",\n  \"client_phone\": \"+33612345678\",\n  \"client_email\": \"sami@example.com\",\n  \"items\": [\n    {\n      \"product_id\": \"product-uuid-here\",\n      \"name\": \"Fraisier 6 parts\",\n      \"qty\": 1,\n      \"options\": {\n        \"taille\": \"6 parts\"\n      },\n      \"price\": 4500\n    }\n  ],\n  \"pickup_or_delivery_date\": \"2025-12-24T10:00:00+01:00\",\n  \"payment_method\": \"CASH\",\n  \"notes\": \"Message sur le gâteau : Joyeux Noël\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            }
+          }
+        },
+        {
+          "name": "Create Order (PAYPAL)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"client_name\": \"Sami Dupont\",\n  \"client_phone\": \"+33612345678\",\n  \"client_email\": \"sami@example.com\",\n  \"items\": [\n    {\n      \"product_id\": \"product-uuid-here\",\n      \"name\": \"Fraisier 6 parts\",\n      \"qty\": 1,\n      \"options\": {\n        \"taille\": \"6 parts\"\n      },\n      \"price\": 4500\n    }\n  ],\n  \"pickup_or_delivery_date\": \"2025-12-24T10:00:00+01:00\",\n  \"payment_method\": \"PAYPAL\",\n  \"notes\": \"Message sur le gâteau : Joyeux Noël\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/orders",
+              "host": ["{{baseUrl}}"],
+              "path": ["orders"]
+            }
+          }
+        },
+        {
+          "name": "Get Orders (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/orders?status=PENDING&payment_status=PENDING",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "orders"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "PENDING"
+                },
+                {
+                  "key": "payment_status",
+                  "value": "PENDING"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Order by ID (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/orders/:id",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "orders", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "order-uuid"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Order Status (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CONFIRMED\",\n  \"notes\": \"Commande confirmée\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/orders/:id/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "orders", ":id", "status"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "order-uuid"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Payment Status (Admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payment_status\": \"PAID\",\n  \"paypal_payment_id\": \"PAY-123456789\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/admin/orders/:id/payment",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "orders", ":id", "payment"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "order-uuid"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Calendar (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/calendar?date_from=2025-12-01&date_to=2025-12-31",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "calendar"],
+              "query": [
+                {
+                  "key": "date_from",
+                  "value": "2025-12-01"
+                },
+                {
+                  "key": "date_to",
+                  "value": "2025-12-31"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Stats (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Webhooks",
+      "item": [
+        {
+          "name": "PayPal Webhook",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_type\": \"PAYMENT.SALE.COMPLETED\",\n  \"resource\": {\n    \"parent_payment\": \"PAY-123456789\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/paypal",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhooks", "paypal"]
+            }
+          }
+        },
+        {
+          "name": "Execute PayPal Payment",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentId\": \"PAY-123456789\",\n  \"payerId\": \"PAYER-123456\",\n  \"orderId\": \"order-uuid\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/webhooks/paypal/execute",
+              "host": ["{{baseUrl}}"],
+              "path": ["webhooks", "paypal", "execute"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
+

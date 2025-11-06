@@ -1,0 +1,131 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #fadadd;
+  background-color: white;
+}
+
+.headerLeft {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.logoIcon {
+  width: 24px;
+  height: 24px;
+  color: #ee2b5b;
+}
+
+.logoText {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #4e4441;
+  margin: 0;
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.navLinks {
+  display: none;
+  gap: 2.25rem;
+
+  a {
+    color: #4e4441;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.2s;
+    position: relative;
+
+    &:hover {
+      color: #ee2b5b;
+    }
+
+    &.active {
+      color: #ee2b5b;
+    }
+  }
+}
+
+.cartButton {
+  position: relative;
+  background-color: #fadadd;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f5c4c9;
+  }
+
+  svg {
+    color: #4e4441;
+    font-size: 20px;
+  }
+}
+
+.cartBadge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background-color: #ee2b5b;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.mobileMenuButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fadadd;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  color: #4e4441;
+  font-size: 1.25rem;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background: #f5c4c9;
+  }
+}
+
+@media (min-width: 768px) {
+  .navLinks {
+    display: flex;
+  }
+
+  .mobileMenuButton {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .navLinks {
+    display: none;
+  }
+}
+

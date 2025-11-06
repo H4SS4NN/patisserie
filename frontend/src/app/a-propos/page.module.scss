@@ -1,0 +1,132 @@
+.aboutPage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.aboutHero {
+  text-align: center;
+  margin-bottom: 4rem;
+  padding: 3rem 1rem;
+  background: linear-gradient(135deg, #fadadd 0%, #f5c4c9 100%);
+  border-radius: 1rem;
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: #4e4441;
+    margin-bottom: 1rem;
+  }
+}
+
+.heroSubtitle {
+  font-size: 1.25rem;
+  color: #6b5e5a;
+}
+
+.aboutContent {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.aboutSection {
+  padding: 2rem 0;
+
+  &:first-of-type {
+    padding-top: 0;
+  }
+}
+
+.sectionContent {
+  max-width: 800px;
+  margin: 0 auto;
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #4e4441;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #6b5e5a;
+    margin-bottom: 1.5rem;
+    text-align: justify;
+  }
+}
+
+.valuesSection {
+  padding: 3rem 1rem;
+  background-color: #fffbf7;
+  border-radius: 1rem;
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #4e4441;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.valueCard {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: #4e4441;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #6b5e5a;
+    line-height: 1.6;
+  }
+}
+
+.valueIcon {
+  font-size: 3rem;
+  color: #ee2b5b;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .aboutHero h1 {
+    font-size: 2rem;
+  }
+
+  .valuesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionContent p {
+    text-align: left;
+  }
+}
+

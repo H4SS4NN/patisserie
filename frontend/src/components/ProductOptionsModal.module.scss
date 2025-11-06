@@ -1,0 +1,334 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+}
+
+.modalContent {
+  background: white;
+  border-radius: 1.5rem;
+  max-width: 1000px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem;
+  border-bottom: 1px solid #fadadd;
+  background: linear-gradient(135deg, #fff5f7 0%, #ffffff 100%);
+}
+
+.headerContent {
+  flex: 1;
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #4e4441;
+    margin: 0 0 0.5rem 0;
+  }
+}
+
+.productDescription {
+  font-size: 0.9375rem;
+  color: #6b5e5a;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #6b5e5a;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+
+  &:hover {
+    color: #ee2b5b;
+  }
+}
+
+.modalBody {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.leftPanel {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+.form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.rightPanel {
+  width: 400px;
+  min-width: 400px;
+  background: linear-gradient(135deg, #fff5f7 0%, #fadadd 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border-left: 1px solid #fadadd;
+}
+
+.imagePreview {
+  width: 100%;
+  height: 100%;
+  max-height: 600px;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  background: white;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #fadadd 0%, #f5c4c9 100%);
+  color: #4e4441;
+  gap: 1rem;
+}
+
+.placeholderIcon {
+  font-size: 5rem;
+  font-weight: 700;
+  color: #ee2b5b;
+  opacity: 0.5;
+  font-family: 'Playfair Display', serif;
+}
+
+.placeholderText {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #6b5e5a;
+}
+
+.formGroup {
+  margin-bottom: 2rem;
+  flex-shrink: 0;
+
+  label {
+    display: block;
+    font-weight: 600;
+    color: #4e4441;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+  }
+}
+
+.required {
+  color: #ee2b5b;
+}
+
+.flavorsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.flavorOption {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border: 2px solid #fadadd;
+  background: white;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  width: 100%;
+
+  &:hover {
+    border-color: #ee2b5b;
+    background: #fff5f7;
+    transform: translateX(4px);
+  }
+
+  &.selected {
+    border-color: #ee2b5b;
+    background: #ee2b5b;
+    color: white;
+    box-shadow: 0 4px 12px rgba(238, 43, 91, 0.2);
+
+    .flavorName {
+      color: white;
+      font-weight: 700;
+    }
+
+    &::before {
+      content: '✓';
+      margin-right: 0.75rem;
+      font-weight: bold;
+    }
+  }
+}
+
+.flavorName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #4e4441;
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.optionButton {
+  padding: 0.875rem 1rem;
+  border: 2px solid #fadadd;
+  background: white;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #4e4441;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #ee2b5b;
+    background: #fadadd;
+  }
+
+  &.selected {
+    border-color: #ee2b5b;
+    background: #ee2b5b;
+    color: white;
+  }
+}
+
+.formActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding-top: 1.5rem;
+  border-top: 1px solid #fadadd;
+  flex-shrink: 0;
+}
+
+.cancelButton,
+.addButton {
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancelButton {
+  background: #fadadd;
+  color: #4e4441;
+
+  &:hover {
+    background: #f5c4c9;
+  }
+}
+
+.addButton {
+  background: #ee2b5b;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: #d81f4a;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    max-width: 100%;
+    border-radius: 1rem;
+    margin: 0.5rem;
+    max-height: 95vh;
+  }
+
+  .modalBody {
+    flex-direction: column;
+  }
+
+  .leftPanel {
+    padding: 1.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .rightPanel {
+    width: 100%;
+    min-width: 100%;
+    height: 300px;
+    padding: 1rem;
+    border-left: none;
+    border-top: 1px solid #fadadd;
+  }
+
+  .imagePreview {
+    max-height: 280px;
+  }
+
+  .placeholderIcon {
+    font-size: 3rem;
+  }
+
+  .placeholderText {
+    font-size: 1rem;
+  }
+
+  .optionsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .optionButton {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.875rem;
+  }
+}
+

@@ -1,0 +1,69 @@
+.mainContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.pageHeading {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #4e4441;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  p {
+    font-size: 1.125rem;
+    color: #6b5e5a;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+.categoryFilters {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding: 0 1rem;
+}
+
+.filterBtn {
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  border: none;
+  background-color: #fadadd;
+  color: #4e4441;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: #f5c4c9;
+  }
+
+  &.active {
+    background-color: #ee2b5b;
+    color: white;
+  }
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.125rem;
+  color: #6b5e5a;
+}
+
+@media (max-width: 768px) {
+  .pageHeading h1 {
+    font-size: 2rem;
+  }
+}
+

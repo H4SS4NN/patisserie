@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pâtisserie Élégante - Choisissez Votre Gâteau</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;700;900&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Epilogue', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee2b5b",
+                        "background-light": "#FFFBF7",
+                        "background-dark": "#221015",
+                        "text-heading": "#4E4441",
+                        "text-body": "#6B5E5A",
+                        "accent-pink": "#FADADD",
+                        "accent-secondary": "#D4E9E2",
+                    },
+                    fontFamily: {
+                        "display": ["Epilogue", "sans-serif"],
+                        "serif": ["Playfair Display", "serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-body dark:text-gray-300">
+<div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col w-full max-w-[960px] flex-1">
+<!-- TopNavBar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-accent-pink/50 dark:border-white/10 px-4 sm:px-6 py-4">
+<div class="flex items-center gap-4 text-text-heading dark:text-white">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-text-heading dark:text-white text-xl font-serif font-bold leading-tight tracking-[-0.015em]">Pâtisserie Élégante</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="hidden md:flex items-center gap-9">
+<a class="text-text-heading dark:text-gray-200 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Nos Gâteaux</a>
+<a class="text-text-heading dark:text-gray-200 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">À Propos</a>
+<a class="text-text-heading dark:text-gray-200 text-sm font-medium leading-normal hover:text-primary dark:hover:text-primary" href="#">Contact</a>
+</div>
+<button class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 bg-accent-pink/60 dark:bg-primary/20 text-text-heading dark:text-white gap-2 text-sm font-bold leading-normal tracking-[0.015em] min-w-0 px-2.5">
+<span class="material-symbols-outlined text-text-heading dark:text-white" style="font-size: 20px;">shopping_cart</span>
+</button>
+</div>
+</header>
+<main class="flex flex-col gap-8 py-10">
+<!-- PageHeading -->
+<div class="flex flex-wrap justify-center text-center gap-3 p-4">
+<div class="flex min-w-72 flex-col gap-3">
+<p class="text-text-heading dark:text-white text-5xl font-serif font-bold leading-tight tracking-[-0.033em]">Découvrez Nos Gâteaux</p>
+<p class="text-text-body dark:text-gray-300 text-lg font-normal leading-normal">Fabriqués à la main avec passion, des recettes classiques aux créations sur mesure.</p>
+</div>
+</div>
+<!-- Chips / Filters -->
+<div class="flex gap-3 p-3 overflow-x-auto justify-center">
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary/20 dark:bg-primary/30 text-primary dark:text-white px-5 cursor-pointer">
+<p class="text-sm font-medium leading-normal">Tous</p>
+</div>
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-accent-pink/60 dark:bg-white/10 text-text-heading dark:text-gray-200 px-5 cursor-pointer hover:bg-accent-pink dark:hover:bg-white/20">
+<p class="text-sm font-medium leading-normal">Classiques</p>
+</div>
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-accent-pink/60 dark:bg-white/10 text-text-heading dark:text-gray-200 px-5 cursor-pointer hover:bg-accent-pink dark:hover:bg-white/20">
+<p class="text-sm font-medium leading-normal">Mariage</p>
+</div>
+<div class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-full bg-accent-pink/60 dark:bg-white/10 text-text-heading dark:text-gray-200 px-5 cursor-pointer hover:bg-accent-pink dark:hover:bg-white/20">
+<p class="text-sm font-medium leading-normal">Portions Individuelles</p>
+</div>
+</div>
+<!-- ImageGrid with ButtonGroup -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-4">
+<!-- Card 1: Le Fraisier -->
+<div class="flex flex-col gap-4 group">
+<div class="w-full bg-center bg-no-repeat aspect-[4/5] bg-cover rounded-xl overflow-hidden shadow-sm">
+<div class="w-full h-full bg-cover bg-center rounded-xl transition-transform duration-300 ease-in-out group-hover:scale-110" data-alt="Une photo d'un gâteau fraisier élégant, avec des couches de génoise, crème mousseline et des fraises fraîches sur le dessus." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBnPfV012UYyNMNhfCrUikV_--Lo_5oxBI70-_Pq41n-QXLM5dfCF6ao_x2ZrO5NRi1z1vZuFwKNQLOdjrxeF78EG69boFTD_yxIlTGLLCsn7QxN_C7wkXdzuDY6CKewUYdyqdqFeJLK1KabzyeoxCfjRdQejQ71YxyMyDrBmc5SVupRBSxCnberVM3pFufK44YIHqvEs4izo_4vmqBOdcI5K8VraATkeDqAEJew9To1CwdU5voWQcciUAbOgs5qefGvvwC1WcsAGUR");'></div>
+</div>
+<div class="flex flex-col gap-3 items-center text-center px-2">
+<p class="text-text-heading dark:text-white text-2xl font-serif font-bold leading-normal">Le Fraisier</p>
+<p class="text-text-body dark:text-gray-300 text-sm font-normal leading-normal">Un délice délicat avec une génoise légère, des fraises fraîches et une crème mousseline soyeuse.</p>
+<button class="flex min-w-[120px] max-w-[200px] mt-2 cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-md hover:bg-primary/90 transition-colors">
+<span class="truncate">Choisir</span>
+</button>
+</div>
+</div>
+<!-- Card 2: L'Opéra -->
+<div class="flex flex-col gap-4 group">
+<div class="w-full bg-center bg-no-repeat aspect-[4/5] bg-cover rounded-xl overflow-hidden shadow-sm">
+<div class="w-full h-full bg-cover bg-center rounded-xl transition-transform duration-300 ease-in-out group-hover:scale-110" data-alt="Une tranche de gâteau Opéra classique, montrant les couches distinctes de biscuit Joconde, de crème au beurre café et de ganache au chocolat." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBgJY6krfIwUDnSoXIvrsLRgDQ77ySCln4_vT5ijl1RMtgeImJbm6iwy_J9gbtf_bwmJuYEyDgEB5zMNYSiyCWOp3JtVFz4gHJgOJkeHY51_l8KH8dU4Ads__XB7v_JfWbY9o4zNX81bj3s7tBWgJ2W8-p8Hg1oRpceC55GxsUnJ3TWvjOxUHppXNFhJQBJFQnvpvY-B8fMWrlNEmIrez_bziYv1QfS1KgDzHCRnGrxUqtx1YCc99YFlVwKXw8u413j3jGI3p36J5Lx");'></div>
+</div>
+<div class="flex flex-col gap-3 items-center text-center px-2">
+<p class="text-text-heading dark:text-white text-2xl font-serif font-bold leading-normal">L'Opéra</p>
+<p class="text-text-body dark:text-gray-300 text-sm font-normal leading-normal">Couches de biscuit Joconde, crème au beurre café riche et une ganache au chocolat décadente.</p>
+<button class="flex min-w-[120px] max-w-[200px] mt-2 cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-md hover:bg-primary/90 transition-colors">
+<span class="truncate">Choisir</span>
+</button>
+</div>
+</div>
+<!-- Card 3: Wedding Cake -->
+<div class="flex flex-col gap-4 group">
+<div class="w-full bg-center bg-no-repeat aspect-[4/5] bg-cover rounded-xl overflow-hidden shadow-sm">
+<div class="w-full h-full bg-cover bg-center rounded-xl transition-transform duration-300 ease-in-out group-hover:scale-110" data-alt="Un magnifique gâteau de mariage à plusieurs étages, décoré de fleurs blanches et de détails complexes." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD6cy0PBv7ZxVhhkkxWab4GdhAEYJ9gpuB1tjBGYcdnoBt4tVcLY9DAzwMI5BIBcdoe6e9h0knlClMvRmMgtk71YqXI0NYZTRal2b6nHZCuwkyBxuJ9SxcHYa_3s8mJ31O_kzfq6hmyVPPdaXgG6iSJzMnbIDfRAFO1994kh0EpY5qsBzeMGpUEvrTDDaSuWlmxjB98X3GX10hbEbjNNSzDPXPwos2_G65sEJkBHUme_hoEIut56KDPKAouW2LwlrErkOvLTW1Bmq8M");'></div>
+</div>
+<div class="flex flex-col gap-3 items-center text-center px-2">
+<p class="text-text-heading dark:text-white text-2xl font-serif font-bold leading-normal">Gâteau de Mariage</p>
+<p class="text-text-body dark:text-gray-300 text-sm font-normal leading-normal">La pièce maîtresse parfaite pour votre jour spécial, entièrement personnalisable à votre goût.</p>
+<button class="flex min-w-[120px] max-w-[200px] mt-2 cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-md hover:bg-primary/90 transition-colors">
+<span class="truncate">Personnaliser</span>
+</button>
+</div>
+</div>
+<!-- Card 4: Assorted Cupcakes -->
+<div class="flex flex-col gap-4 group">
+<div class="w-full bg-center bg-no-repeat aspect-[4/5] bg-cover rounded-xl overflow-hidden shadow-sm">
+<div class="w-full h-full bg-cover bg-center rounded-xl transition-transform duration-300 ease-in-out group-hover:scale-110" data-alt="Un assortiment de cupcakes colorés et décorés, chacun avec un glaçage et des garnitures uniques." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDel5ONod_PdAfrWoolF7umX72GgcxiVD17sxyIwG65DRvZyUnSEbIJqU0LbIs3BXyY7YdYBl8kTkPOOiJROxBBAh4dzfzwmRcS-PFNsJv7QCbcdE_J8NY31qkwUXNMkkx1pYNHd9fArUxliWz-O52EdbvQ1kQ7IgWHdkdtoHXyQmUhlZrYk8O8bbyCAk0OVvrG9MBHwrlAlOrRQfHEzEEYEHsDraYosBC8TrU9lk5Lw_QlRKrzWXzxUwLLVu00DZLgM70K1wa4bhKB");'></div>
+</div>
+<div class="flex flex-col gap-3 items-center text-center px-2">
+<p class="text-text-heading dark:text-white text-2xl font-serif font-bold leading-normal">Cupcakes Assortis</p>
+<p class="text-text-body dark:text-gray-300 text-sm font-normal leading-normal">Une délicieuse variété de nos saveurs de cupcakes les plus populaires, parfaite pour toute occasion.</p>
+<button class="flex min-w-[120px] max-w-[200px] mt-2 cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-md hover:bg-primary/90 transition-colors">
+<span class="truncate">Choisir</span>
+</button>
+</div>
+</div>
+<!-- Card 5: Macarons -->
+<div class="flex flex-col gap-4 group">
+<div class="w-full bg-center bg-no-repeat aspect-[4/5] bg-cover rounded-xl overflow-hidden shadow-sm">
+<div class="w-full h-full bg-cover bg-center rounded-xl transition-transform duration-300 ease-in-out group-hover:scale-110" data-alt="Une pile de macarons colorés aux saveurs de pistache, framboise et chocolat." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBQnsBizwHm6UCqcHcdil3skhVHoyyuupNuSpqVbY6QY-0QGfM6qztKwhR-uKcCe79Np0-5EbtrbkdSg0T6YG5aPa-9o7vLQrB8gf5lMLQBE4ZpYHE2WYneKxQX9LRQ4uNNU8z2A7GzrmX_g5n1zfkH4AbUf-98-euxQp8tSnVtvv-ro4LsfJu22iH8wydmKKWZkdja_N6o7fxQykpZ2qOqT4rj0qnCigE8bJsTl3mnGbVu6VCL9oYsPyhkHR6Ifr4lL7kYwJldjYwb");'></div>
+</div>
+<div class="flex flex-col gap-3 items-center text-center px-2">
+<p class="text-text-heading dark:text-white text-2xl font-serif font-bold leading-normal">Macarons Parisiens</p>
+<p class="text-text-body dark:text-gray-300 text-sm font-normal leading-normal">Coques légères à la meringue aux amandes avec de succulentes garnitures à la crème au beurre ou à la ganache.</p>
+<button class="flex min-w-[120px] max-w-[200px] mt-2 cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-md hover:bg-primary/90 transition-colors">
+<span class="truncate">Choisir</span>
+</button>
+</div>
+</div>
+<!-- Card 6: Tarte au Citron -->
+<div class="flex flex-col gap-4 group">
+<div class="w-full bg-center bg-no-repeat aspect-[4/5] bg-cover rounded-xl overflow-hidden shadow-sm">
+<div class="w-full h-full bg-cover bg-center rounded-xl transition-transform duration-300 ease-in-out group-hover:scale-110" data-alt="Une tarte au citron meringuée avec une meringue dorée parfaitement grillée sur le dessus." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAUVeCGzUyco7vwGAVDTi3lC5jYmFMfTbS2o-g9b6M3hguxCX8mr4fJvQgex9OIyOzBVRDmu8h-xzv2EooSw44qVQmUFG43HycIxTubIawKXGuddkrDJiMWKp4RGxXh0ymstBJ8dgzObEOroBk9TQDLMJT3c-z6VMdZv3T2Ghaoxeh05WIq56Hcd6Pg39WtdvYzK0xzMVVi04G9ahY4hj8_-Tdu5PFUElZf07G6dxedv_StQbx-nFTGxrubz8F-JVUuPzYScZJ-CERZ");'></div>
+</div>
+<div class="flex flex-col gap-3 items-center text-center px-2">
+<p class="text-text-heading dark:text-white text-2xl font-serif font-bold leading-normal">Tarte au Citron Meringuée</p>
+<p class="text-text-body dark:text-gray-300 text-sm font-normal leading-normal">Une croûte de sablé au beurre, une crème au citron acidulée et une meringue italienne moelleuse.</p>
+<button class="flex min-w-[120px] max-w-[200px] mt-2 cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] shadow-md hover:bg-primary/90 transition-colors">
+<span class="truncate">Choisir</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="mt-16 py-8 border-t border-accent-pink/50 dark:border-white/10">
+<div class="flex flex-col sm:flex-row justify-between items-center gap-6 px-4">
+<p class="text-text-body dark:text-gray-400 text-sm">© 2024 Pâtisserie Élégante. Tous droits réservés.</p>
+<div class="flex gap-4">
+<a class="text-text-body dark:text-gray-400 hover:text-primary dark:hover:text-primary" href="#">
+<svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewbox="0 0 24 24"><path clip-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" fill-rule="evenodd"></path></svg>
+</a>
+<a class="text-text-body dark:text-gray-400 hover:text-primary dark:hover:text-primary" href="#">
+<svg aria-hidden="true" class="h-6 w-6" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.162 6.162 6.162 6.162-2.759 6.162-6.162-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4s1.791-4 4-4 4 1.79 4 4-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"></path></svg>
+</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</div>
+</div>
+</body></html>

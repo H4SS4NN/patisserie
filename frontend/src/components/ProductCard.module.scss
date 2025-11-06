@@ -1,0 +1,79 @@
+.productCard {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.productImageContainer {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.productImage {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: transform 0.3s;
+}
+
+.productCard:hover .productImage {
+  transform: scale(1.05);
+}
+
+.productInfo {
+  padding: 1.5rem;
+}
+
+.productName {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  color: #4e4441;
+  margin: 0 0 0.5rem 0;
+}
+
+.productDescription {
+  font-size: 0.875rem;
+  color: #6b5e5a;
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.productFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.productPrice {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ee2b5b;
+}
+
+.productButton {
+  background-color: #ee2b5b;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #d81f4a;
+  }
+}
+

@@ -1,0 +1,129 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #fadadd 0%, #f5c4c9 100%);
+}
+
+.cancelCard {
+  background: white;
+  border-radius: 1rem;
+  padding: 3rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.iconContainer {
+  margin-bottom: 2rem;
+}
+
+.cancelIcon {
+  font-size: 5rem;
+  color: #fab1a0;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  color: #4e4441;
+  margin: 0 0 1rem 0;
+}
+
+.message {
+  font-size: 1.125rem;
+  color: #6b5e5a;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.infoBox {
+  background: #fffbf7;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  text-align: left;
+  border: 1px solid #fadadd;
+  margin-bottom: 2rem;
+
+  p {
+    margin: 0 0 1rem 0;
+    color: #4e4441;
+    font-weight: 600;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: #6b5e5a;
+    line-height: 1.8;
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.homeButton,
+.cartButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.homeButton {
+  background: #ee2b5b;
+  color: white;
+
+  &:hover {
+    background: #d81f4a;
+  }
+}
+
+.cartButton {
+  background: #fadadd;
+  color: #4e4441;
+
+  &:hover {
+    background: #f5c4c9;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .cancelCard {
+    padding: 2rem 1.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+  .homeButton,
+  .cartButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

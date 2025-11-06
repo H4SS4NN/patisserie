@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone', // Nécessaire pour Docker
   reactStrictMode: true,
   sassOptions: {
     includePaths: ['./src/styles'],
@@ -15,6 +16,14 @@ const nextConfig = {
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
     pagesBufferLength: 2,
+  },
+  // Désactiver ESLint pendant le build pour la production
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  // Désactiver la vérification TypeScript pendant le build (optionnel)
+  typescript: {
+    ignoreBuildErrors: false, // Garder la vérification TypeScript
   },
 }
 

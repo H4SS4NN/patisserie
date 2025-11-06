@@ -88,7 +88,7 @@ function PaymentSuccessContent() {
           className={styles.iconContainer}
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
+          transition={{ type: 'spring' as const, stiffness: 200, damping: 15, delay: 0.2 }}
         >
           <FaCheckCircle className={styles.successIcon} />
         </motion.div>

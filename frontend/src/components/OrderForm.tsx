@@ -169,7 +169,7 @@ export default function OrderForm({ onClose, onComplete }: OrderFormProps) {
       scale: 1,
       y: 0,
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         damping: 25,
         stiffness: 300,
         duration: 0.5,

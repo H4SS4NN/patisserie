@@ -102,7 +102,7 @@ export default function ProductModal({ product, onClose, onSave }: ProductModalP
       scale: 1,
       y: 0,
       transition: {
-        type: 'spring',
+        type: 'spring' as const,
         damping: 25,
         stiffness: 300,
         duration: 0.5,

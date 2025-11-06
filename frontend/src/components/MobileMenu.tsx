@@ -48,7 +48,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            transition={{ type: 'spring' as const, damping: 25, stiffness: 300 }}
           >
             <div className={styles.menuHeader}>
               <h2>Menu</h2>

@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { Order, AdminUser, OrderStatus, PaymentStatus, Product } from '@/types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+// Utiliser une URL relative en production pour que Nginx gère le routing
+const API_BASE_URL = typeof window !== 'undefined' 
+  ? '' // Utiliser le même domaine en production (via Nginx)
+  : process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 const adminApi = axios.create({
   baseURL: API_BASE_URL,

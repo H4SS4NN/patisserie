@@ -49,7 +49,7 @@ export const adminLogin = async (
   password: string
 ): Promise<{ token?: string; user?: AdminUser; requires2FA?: boolean; tempToken?: string }> => {
   try {
-    const response = await adminApi.post('/auth/login', { username, password });
+    const response = await adminApi.post('/admin/login', { username, password });
     if (response.data.token && typeof window !== 'undefined') {
       localStorage.setItem('admin_token', response.data.token);
       localStorage.setItem('admin_user', JSON.stringify(response.data.user));

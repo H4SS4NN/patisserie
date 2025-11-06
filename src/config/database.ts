@@ -14,7 +14,7 @@ const entities = [Product, Order, AdminUser, AuditLog];
 
 // Chemin des migrations
 const migrationsPath = process.env.NODE_ENV === 'production'
-  ? join(__dirname, '../migrations/**/*.js')
+  ? 'dist/migrations/**/*.js'
   : join(__dirname, '../migrations/**/*.ts');
 
 export const AppDataSource = new DataSource({
@@ -26,7 +26,8 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE || 'patisserie_db',
   entities: entities,
   migrations: [migrationsPath],
-  synchronize: process.env.NODE_ENV === 'development',
+  // Activer synchronize pour créer automatiquement les tables
+  synchronize: true,
   logging: process.env.NODE_ENV === 'development',
 });
 

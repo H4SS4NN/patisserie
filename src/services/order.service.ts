@@ -17,46 +17,20 @@ export interface CreateOrderDto {
 
 export class OrderService {
   static async calculateTotal(items: OrderItem[]): Promise<number> {
-    // Validate items and calculate total from server-side prices
-    const productRepo = AppDataSource.getRepository(Product);
-    let total = 0;
-
-    for (const item of items) {
-      const product = await productRepo.findOne({ where: { id: item.product_id } });
-      if (!product || !product.available) {
-        throw new Error(`Product ${item.product_id} not found or not available`);
-      }
-      // Use server-side price for security
-      total += product.price * item.qty;
-    }
-
+    const { total } = await this.resolveOrderItems(items);
     return total;
   }
 
   static async createOrder(dto: CreateOrderDto): Promise<Order> {
     const orderRepo = AppDataSource.getRepository(Order);
-    const productRepo = AppDataSource.getRepository(Product);
-
-    // Validate all products exist and are available
-    for (const item of dto.items) {
-      const product = await productRepo.findOne({ where: { id: item.product_id } });
-      if (!product) {
-        throw new Error(`Product ${item.product_id} not found`);
-      }
-      if (!product.available) {
-        throw new Error(`Product ${item.product_id} is not available`);
-      }
-    }
-
-    // Calculate total from server-side prices
-    const total_price = await this.calculateTotal(dto.items);
+    const { total, sanitizedItems } = await this.resolveOrderItems(dto.items);
 
     const order = new Order();
     order.client_name = dto.client_name;
     order.client_phone = dto.client_phone;
     order.client_email = dto.client_email;
-    order.items = dto.items;
-    order.total_price = total_price;
+    order.items = sanitizedItems;
+    order.total_price = total;
     order.payment_method = dto.payment_method;
     order.payment_status =
       dto.payment_method === PaymentMethod.CASH
@@ -74,6 +48,74 @@ export class OrderService {
     await EmailService.sendNewOrderAlert(savedOrder);
 
     return savedOrder;
+  }
+
+  private static async resolveOrderItems(
+    items: OrderItem[]
+  ): Promise<{ total: number; sanitizedItems: OrderItem[] }> {
+    const productRepo = AppDataSource.getRepository(Product);
+    const sanitizedItems: OrderItem[] = [];
+    let total = 0;
+
+    for (const item of items) {
+      const product = await productRepo.findOne({
+        where: { id: item.product_id },
+        relations: ['flavors'],
+      });
+      if (!product) {
+        throw new Error(`Product ${item.product_id} not found`);
+      }
+      if (!product.available) {
+        throw new Error(`Product ${product.name} is not available`);
+      }
+
+      const selectedOptions: Record<string, any> = item.options ? { ...item.options } : {};
+      const selectedFlavorId = selectedOptions.flavor_id;
+      const selectedFlavorName = selectedOptions.flavor_name || selectedOptions.flavor;
+
+      let matchedFlavor = product.flavors?.find((flavor) => flavor.id === selectedFlavorId);
+
+      if (!matchedFlavor && selectedFlavorName) {
+        matchedFlavor = product.flavors?.find(
+          (flavor) => flavor.name.toLowerCase() === String(selectedFlavorName).toLowerCase()
+        );
+      }
+
+      if (selectedFlavorId && !matchedFlavor) {
+        throw new Error(`Flavor ${selectedFlavorId} not available for product ${product.name}`);
+      }
+      if (!selectedFlavorId && selectedFlavorName && !matchedFlavor) {
+        throw new Error(`Flavor ${selectedFlavorName} not available for product ${product.name}`);
+      }
+
+      const flavorModifier = matchedFlavor?.price_modifier ?? 0;
+      const unitPrice = product.price + flavorModifier;
+      total += unitPrice * item.qty;
+
+      if (matchedFlavor) {
+        selectedOptions.flavor_id = matchedFlavor.id;
+        selectedOptions.flavor_name = matchedFlavor.name;
+        selectedOptions.flavor = matchedFlavor.name;
+        selectedOptions.flavor_price_modifier = matchedFlavor.price_modifier;
+      } else {
+        delete selectedOptions.flavor_id;
+        delete selectedOptions.flavor_name;
+        delete selectedOptions.flavor;
+        delete selectedOptions.flavor_price_modifier;
+      }
+
+      const sanitizedOptions = Object.keys(selectedOptions).length > 0 ? selectedOptions : undefined;
+
+      sanitizedItems.push({
+        product_id: product.id,
+        name: product.name,
+        qty: item.qty,
+        price: unitPrice,
+        options: sanitizedOptions,
+      });
+    }
+
+    return { total, sanitizedItems };
   }
 
   static async updateOrderStatus(

@@ -196,6 +196,10 @@
       font-weight: 700;
     }
 
+    .flavorPrice {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
     &::before {
       content: '✓';
       margin-right: 0.75rem;
@@ -208,6 +212,19 @@
   font-size: 1rem;
   font-weight: 600;
   color: #4e4441;
+}
+
+.flavorDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  align-items: flex-start;
+}
+
+.flavorPrice {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(78, 68, 65, 0.65);
 }
 
 .optionsGrid {

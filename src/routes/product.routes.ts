@@ -3,6 +3,8 @@ import { ProductController } from '../controllers/product.controller';
 import { authenticateToken, requireAdmin } from '../middlewares/auth.middleware';
 import {
   createProductValidation,
+  createFlavorValidation,
+  updateFlavorValidation,
   validate,
 } from '../middlewares/validation.middleware';
 
@@ -23,6 +25,27 @@ router.post(
 );
 router.patch('/:id', authenticateToken, requireAdmin, ProductController.updateProduct);
 router.delete('/:id', authenticateToken, requireAdmin, ProductController.deleteProduct);
+router.get('/:id/flavors', authenticateToken, requireAdmin, ProductController.listProductFlavors);
+router.post(
+  '/:id/flavors',
+  authenticateToken,
+  requireAdmin,
+  validate(createFlavorValidation),
+  ProductController.addFlavor
+);
+router.patch(
+  '/:id/flavors/:flavorId',
+  authenticateToken,
+  requireAdmin,
+  validate(updateFlavorValidation),
+  ProductController.updateFlavor
+);
+router.delete(
+  '/:id/flavors/:flavorId',
+  authenticateToken,
+  requireAdmin,
+  ProductController.deleteFlavor
+);
 
 export default router;
 

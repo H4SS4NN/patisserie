@@ -1,4 +1,4 @@
-# Frontend Next.js - Assiqa Pâtisserie
+# Frontend Next.js - Assia Pâtisserie
 
 Frontend moderne et scalable construit avec Next.js 14, TypeScript et SCSS.
 

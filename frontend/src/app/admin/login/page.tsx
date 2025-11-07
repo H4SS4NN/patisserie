@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { adminLogin } from '@/lib/adminApi';
+import { useSiteSettings } from '@/contexts/SiteSettingsContext';
 import styles from './page.module.scss';
 
 export default function AdminLoginPage() {
@@ -12,6 +13,9 @@ export default function AdminLoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const {
+    settings: { adminBrandName },
+  } = useSiteSettings();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,7 +58,7 @@ export default function AdminLoginPage() {
               />
             </svg>
           </div>
-          <h1>Assiqa - Administration</h1>
+          <h1>{adminBrandName}</h1>
           <p>Connectez-vous pour gérer les commandes</p>
         </div>
 

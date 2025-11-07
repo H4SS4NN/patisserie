@@ -1,4 +1,4 @@
-# 📋 Fonctionnalités Manquantes - Assiqa Pâtisserie
+# 📋 Fonctionnalités Manquantes - Assia Pâtisserie
 
 ## 🔴 CRITIQUE - Fonctionnalités Essentielles
 

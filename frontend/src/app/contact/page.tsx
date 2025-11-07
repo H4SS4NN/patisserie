@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FaMapMarkerAlt,
   FaPhone,
@@ -9,7 +9,99 @@ import {
   FaFacebook,
   FaInstagram,
 } from 'react-icons/fa';
+import { getPageContent } from '@/lib/api';
 import styles from './page.module.scss';
+
+interface ContactInfoItem {
+  id?: string;
+  title: string;
+  icon?: string;
+  lines: string[];
+  note?: string;
+}
+
+interface SocialLink {
+  id?: string;
+  platform: string;
+  url: string;
+}
+
+interface ContactContent {
+  heroTitle: string;
+  heroSubtitle: string;
+  introText: string;
+  contactInfo: ContactInfoItem[];
+  socialLinks: SocialLink[];
+}
+
+const fallbackContent: ContactContent = {
+  heroTitle: 'Contactez Assia',
+  heroSubtitle: "Nous serions ravis d'entendre parler de vous et de répondre à toutes vos questions",
+  introText:
+    "Vous avez une question ? Une demande de devis pour un gâteau sur mesure ? N'hésitez pas à nous contacter, nous vous répondrons dans les plus brefs délais.",
+  contactInfo: [
+    {
+      id: 'address',
+      title: 'Adresse',
+      icon: 'map-marker',
+      lines: ['45 Avenue des Gourmets', '75008 Paris, France'],
+      note: 'Métro : Miromesnil (lignes 9 et 13) — Parking disponible à proximité',
+    },
+    {
+      id: 'phone',
+      title: 'Téléphone',
+      icon: 'phone',
+      lines: ['+33 1 42 68 95 47'],
+      note: 'Appelez-nous pour vos commandes ou pour toute question',
+    },
+    {
+      id: 'email',
+      title: 'Email',
+      icon: 'envelope',
+      lines: ['contact@assia-patisserie.fr'],
+      note: 'Réponse sous 24h — commandes@assia-patisserie.fr pour les demandes spéciales',
+    },
+    {
+      id: 'hours',
+      title: "Horaires d'ouverture",
+      icon: 'clock',
+      lines: ['Lundi - Vendredi : 7h30 - 19h30', 'Samedi : 8h - 20h', 'Dimanche : 9h - 18h'],
+      note: 'Fermé les jours fériés — Ouvert pendant les fêtes de fin d’année',
+    },
+  ],
+  socialLinks: [
+    { id: 'facebook', platform: 'facebook', url: 'https://facebook.com/assiapatisserie' },
+    { id: 'instagram', platform: 'instagram', url: 'https://instagram.com/assiapatisserie' },
+  ],
+};
+
+const contactIconMap: Record<string, JSX.Element> = {
+  'map-marker': <FaMapMarkerAlt />,
+  map: <FaMapMarkerAlt />,
+  adresse: <FaMapMarkerAlt />,
+  phone: <FaPhone />,
+  téléphone: <FaPhone />,
+  envelope: <FaEnvelope />,
+  email: <FaEnvelope />,
+  clock: <FaClock />,
+  horaires: <FaClock />,
+};
+
+const socialIconMap: Record<string, JSX.Element> = {
+  facebook: <FaFacebook />,
+  instagram: <FaInstagram />,
+};
+
+function getContactIcon(iconKey?: string) {
+  if (!iconKey) {
+    return <FaMapMarkerAlt />;
+  }
+  return contactIconMap[iconKey.toLowerCase()] || <FaMapMarkerAlt />;
+}
+
+function getSocialIcon(platform: string) {
+  return socialIconMap[platform.toLowerCase()] || <FaFacebook />;
+}
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -19,6 +111,53 @@ export default function ContactPage() {
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [content, setContent] = useState<ContactContent>(fallbackContent);
+
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const page = await getPageContent<Partial<ContactContent>>('contact');
+        if (page.content) {
+          const incoming = page.content;
+          setContent({
+            heroTitle: incoming.heroTitle?.trim() || fallbackContent.heroTitle,
+            heroSubtitle: incoming.heroSubtitle?.trim() || fallbackContent.heroSubtitle,
+            introText: incoming.introText?.trim() || fallbackContent.introText,
+            contactInfo:
+              Array.isArray(incoming.contactInfo) && incoming.contactInfo.length > 0
+                ? incoming.contactInfo
+                    .map((item) => ({
+                      id: item.id,
+                      title: item.title?.trim() || '',
+                      icon: item.icon,
+                      lines: Array.isArray(item.lines)
+                        ? item.lines
+                            .map((line) => (typeof line === 'string' ? line.trim() : ''))
+                            .filter((line) => line.length > 0)
+                        : [],
+                      note: item.note?.trim() || undefined,
+                    }))
+                    .filter((item) => item.title || item.lines.length > 0)
+                : fallbackContent.contactInfo,
+            socialLinks:
+              Array.isArray(incoming.socialLinks) && incoming.socialLinks.length > 0
+                ? incoming.socialLinks
+                    .map((link) => ({
+                      id: link.id,
+                      platform: link.platform?.trim() || '',
+                      url: link.url?.trim() || '#',
+                    }))
+                    .filter((link) => link.platform && link.url)
+                : fallbackContent.socialLinks,
+          });
+        }
+      } catch (error) {
+        console.error('Error loading contact page content:', error);
+      }
+    };
+
+    fetchContent();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -29,7 +168,6 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Ici vous pouvez ajouter l'envoi du formulaire à votre backend
     console.log('Form submitted:', formData);
     setSubmitted(true);
     setTimeout(() => {
@@ -41,8 +179,8 @@ export default function ContactPage() {
   return (
     <main className={styles.contactPage}>
       <div className={styles.contactHero}>
-        <h1>Contactez Assiqa</h1>
-        <p>Nous serions ravis d'entendre parler de vous et de répondre à toutes vos questions</p>
+        <h1>{content.heroTitle}</h1>
+        <p>{content.heroSubtitle}</p>
       </div>
 
       <div className={styles.contactContent}>
@@ -50,104 +188,45 @@ export default function ContactPage() {
           <h2>Informations de Contact</h2>
 
           <div className={styles.contactInfoGrid}>
-            <div className={styles.contactInfoItem}>
-              <div className={styles.contactIcon}>
-                <FaMapMarkerAlt />
+            {content.contactInfo.map((item) => (
+              <div key={item.id || item.title} className={styles.contactInfoItem}>
+                <div className={styles.contactIcon}>{getContactIcon(item.icon)}</div>
+                <div className={styles.contactDetails}>
+                  <h3>{item.title}</h3>
+                  {item.lines.map((line, index) => (
+                    <p key={`${item.id || item.title}-line-${index}`}>{line}</p>
+                  ))}
+                  {item.note && <p className={styles.contactNote}>{item.note}</p>}
+                </div>
               </div>
-              <div className={styles.contactDetails}>
-                <h3>Adresse</h3>
-                <p>
-                  45 Avenue des Gourmets<br />
-                  75008 Paris, France
-                </p>
-                <p className={styles.contactNote}>
-                  Métro : Miromesnil (lignes 9 et 13)<br />
-                  Parking disponible à proximité
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.contactInfoItem}>
-              <div className={styles.contactIcon}>
-                <FaPhone />
-              </div>
-              <div className={styles.contactDetails}>
-                <h3>Téléphone</h3>
-                <p>+33 1 42 68 95 47</p>
-                <p className={styles.contactNote}>
-                  Appelez-nous pour vos commandes<br />
-                  ou pour toute question
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.contactInfoItem}>
-              <div className={styles.contactIcon}>
-                <FaEnvelope />
-              </div>
-              <div className={styles.contactDetails}>
-                <h3>Email</h3>
-                <p>contact@assiqa-patisserie.fr</p>
-                <p className={styles.contactNote}>
-                  Réponse sous 24h<br />
-                  Pour les commandes spéciales : commandes@assiqa-patisserie.fr
-                </p>
-              </div>
-            </div>
-
-            <div className={styles.contactInfoItem}>
-              <div className={styles.contactIcon}>
-                <FaClock />
-              </div>
-              <div className={styles.contactDetails}>
-                <h3>Horaires d'ouverture</h3>
-                <p>
-                  <strong>Lundi - Vendredi:</strong> 7h30 - 19h30<br />
-                  <strong>Samedi:</strong> 8h - 20h<br />
-                  <strong>Dimanche:</strong> 9h - 18h
-                </p>
-                <p className={styles.contactNote}>
-                  Fermé les jours fériés<br />
-                  Ouvert pendant les fêtes de fin d'année
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div className={styles.socialMedia}>
-            <h3>Suivez Assiqa</h3>
+            <h3>Suivez-nous</h3>
             <p className={styles.socialDescription}>
               Retrouvez nos dernières créations et nos actualités sur nos réseaux sociaux
             </p>
             <div className={styles.socialIcons}>
-              <a
-                href="https://facebook.com/assiqapatisserie"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className={styles.socialLink}
-              >
-                <FaFacebook />
-              </a>
-              <a
-                href="https://instagram.com/assiqapatisserie"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className={styles.socialLink}
-              >
-                <FaInstagram />
-              </a>
+              {content.socialLinks.map((link) => (
+                <a
+                  key={link.id || link.platform}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.platform}
+                  className={styles.socialLink}
+                >
+                  {getSocialIcon(link.platform)}
+                </a>
+              ))}
             </div>
           </div>
         </div>
 
         <div className={styles.contactFormSection}>
           <h2>Envoyez-nous un Message</h2>
-          <p className={styles.formIntro}>
-            Vous avez une question ? Une demande de devis pour un gâteau sur mesure ? N'hésitez pas
-            à nous contacter, nous vous répondrons dans les plus brefs délais.
-          </p>
+          <p className={styles.formIntro}>{content.introText}</p>
           <form className={styles.contactForm} onSubmit={handleSubmit}>
             <div className={styles.formGroup}>
               <label htmlFor="name">Nom complet *</label>

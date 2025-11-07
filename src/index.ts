@@ -8,6 +8,8 @@ import authRoutes from './routes/auth.routes';
 import orderRoutes from './routes/order.routes';
 import productRoutes from './routes/product.routes';
 import webhookRoutes from './routes/webhook.routes';
+import contentRoutes from './routes/content.routes';
+import contentPublicRoutes from './routes/content.public.routes';
 import { authenticateToken, requireAdmin } from './middlewares/auth.middleware';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
@@ -78,6 +80,8 @@ app.use('/admin/orders', orderRoutes); // Admin order management (auth checked i
 app.use('/admin/products', productRoutes); // Admin product management (auth checked in routes)
 app.use('/orders', orderRoutes); // Public order creation
 app.use('/products', productRoutes); // Public product listing
+app.use('/admin/content', contentRoutes); // Admin content management
+app.use('/content', contentPublicRoutes); // Public page content retrieval
 app.use('/webhooks', webhookRoutes);
 
 // Error handling middleware

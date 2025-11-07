@@ -54,11 +54,31 @@ export default function OrderForm({ onClose, onComplete }: OrderFormProps) {
           throw new Error(`Invalid product ID format: ${productId}. Expected UUID. Please clear your cart and add products again.`);
         }
 
+        const optionPayload: Record<string, any> = {};
+        if (item.options) {
+          if (item.options.flavor) {
+            optionPayload.flavor = item.options.flavor;
+            optionPayload.flavor_name = item.options.flavor;
+          }
+          if (item.options.flavorId) {
+            optionPayload.flavor_id = item.options.flavorId;
+          }
+          if (item.options.flavorPriceModifier !== undefined) {
+            optionPayload.flavor_price_modifier = item.options.flavorPriceModifier;
+          }
+          if (item.options.parts !== undefined) {
+            optionPayload.parts = item.options.parts;
+          }
+          if (item.options.basePrice !== undefined) {
+            optionPayload.base_price = item.options.basePrice;
+          }
+        }
+
         return {
           product_id: productId,
           name: item.name.trim(),
           qty: parseInt(String(item.quantity), 10), // S'assurer que c'est un entier
-          options: item.options || {},
+          options: Object.keys(optionPayload).length > 0 ? optionPayload : undefined,
           price: parseInt(String(item.price), 10), // S'assurer que c'est un entier
         };
       });

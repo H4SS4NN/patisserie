@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { FaShoppingCart, FaBars } from 'react-icons/fa';
 import { useCart } from '@/contexts/CartContext';
+import { useSiteSettings } from '@/contexts/SiteSettingsContext';
 import MobileMenu from './MobileMenu';
 import styles from './Header.module.scss';
 
@@ -14,6 +15,9 @@ export default function Header() {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const {
+    settings: { brandName },
+  } = useSiteSettings();
 
   const isActive = (path: string) => {
     if (path === '/') {
@@ -41,7 +45,7 @@ export default function Header() {
               />
             </svg>
           </div>
-          <h2 className={styles.logoText}>Assiqa</h2>
+          <h2 className={styles.logoText}>{brandName}</h2>
         </Link>
         <div className={styles.headerRight}>
           <nav className={styles.navLinks}>

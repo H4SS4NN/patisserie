@@ -8,9 +8,11 @@ import { Product } from '../entities/Product.entity';
 import { Order } from '../entities/Order.entity';
 import { AdminUser } from '../entities/AdminUser.entity';
 import { AuditLog } from '../entities/AuditLog.entity';
+import { ProductFlavor } from '../entities/ProductFlavor.entity';
+import { PageContent } from '../entities/PageContent.entity';
 
 // Import explicite des entités pour éviter les problèmes de chemin
-const entities = [Product, Order, AdminUser, AuditLog];
+const entities = [Product, ProductFlavor, PageContent, Order, AdminUser, AuditLog];
 
 // Chemin des migrations
 const migrationsPath = process.env.NODE_ENV === 'production'

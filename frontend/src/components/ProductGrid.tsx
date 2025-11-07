@@ -2,13 +2,13 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Product } from '@/types';
+import { CartItemOptions, Product } from '@/types';
 import ProductCard from './ProductCard';
 import styles from './ProductGrid.module.scss';
 
 interface ProductGridProps {
   products: Product[];
-  onAddToCart: (product: Product, options?: { flavor?: string; parts?: number }) => void;
+  onAddToCart: (product: Product, options?: CartItemOptions) => void;
 }
 
 export default function ProductGrid({ products, onAddToCart }: ProductGridProps) {

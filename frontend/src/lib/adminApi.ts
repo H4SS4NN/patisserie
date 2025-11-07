@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Order, AdminUser, OrderStatus, PaymentStatus, Product } from '@/types';
+import { Order, AdminUser, OrderStatus, PaymentStatus, Product, PageContent } from '@/types';
 
 // Utiliser /api comme préfixe pour que Nginx route vers le backend
 const API_BASE_URL = typeof window !== 'undefined' 
@@ -198,6 +198,67 @@ export const deleteProduct = async (id: string): Promise<void> => {
     await adminApi.delete(`/admin/products/${id}`);
   } catch (error) {
     console.error('Error deleting product:', error);
+    throw error;
+  }
+};
+
+// Content
+export const getPageContents = async (): Promise<PageContent[]> => {
+  try {
+    const response = await adminApi.get<{ pages: PageContent[] }>('/admin/content');
+    return response.data.pages || [];
+  } catch (error) {
+    console.error('Error fetching page contents:', error);
+    throw error;
+  }
+};
+
+export const getPageContentBySlug = async (slug: string): Promise<PageContent> => {
+  try {
+    const response = await adminApi.get<{ page: PageContent }>(`/admin/content/${slug}`);
+    return response.data.page;
+  } catch (error) {
+    console.error('Error fetching page content:', error);
+    throw error;
+  }
+};
+
+export const upsertPageContent = async (
+  slug: string,
+  payload: Partial<PageContent>
+): Promise<PageContent> => {
+  try {
+    const response = await adminApi.patch<{ success: boolean; page: PageContent }>(
+      `/admin/content/${slug}`,
+      payload
+    );
+    return response.data.page;
+  } catch (error) {
+    console.error('Error updating page content:', error);
+    throw error;
+  }
+};
+
+export const createPageContent = async (
+  payload: Partial<PageContent>
+): Promise<PageContent> => {
+  try {
+    const response = await adminApi.post<{ success: boolean; page: PageContent }>(
+      '/admin/content',
+      payload
+    );
+    return response.data.page;
+  } catch (error) {
+    console.error('Error creating page content:', error);
+    throw error;
+  }
+};
+
+export const deletePageContent = async (slug: string): Promise<void> => {
+  try {
+    await adminApi.delete(`/admin/content/${slug}`);
+  } catch (error) {
+    console.error('Error deleting page content:', error);
     throw error;
   }
 };

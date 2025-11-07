@@ -2,6 +2,7 @@
 export interface FlavorOption {
   name: string;
   image?: string; // URL de l'image pour ce goût
+  priceModifier?: number; // Surcoût éventuel en centimes
 }
 
 export interface CategoryConfig {
@@ -40,9 +41,18 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
       { name: 'Fraisier' },
       { name: 'Royal' },
       { name: '3 chocolat' },
-      { name: 'Cheescake' },
       { name: 'Citron' },
-      { name: 'framboise' },
+      { name: 'Framboise' },
+      { name: 'Pistache' },
+    ],
+    hasParts: false,
+  },
+  'Cheesecakes': {
+    name: 'Cheesecakes',
+    flavors: [
+      { name: 'Nature' },
+      { name: 'Citron' },
+      { name: 'Framboise' },
       { name: 'Spéculos' },
       { name: 'Pistache' },
     ],
@@ -60,7 +70,7 @@ export const CATEGORIES: Record<string, CategoryConfig> = {
   },
   'Layer cake': {
     name: 'Layer cake',
-    flavors: [{ name: 'Vanille choco' }],
+    flavors: [{ name: 'Vanille' }, { name: 'Chocolat' }],
     hasParts: true,
     parts: [8, 12, 16],
   },

@@ -4,6 +4,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTrash } from 'react-icons/fa';
 import { useCart } from '@/contexts/CartContext';
+import { CartItem } from '@/types';
 import styles from './Cart.module.scss';
 
 interface CartProps {
@@ -16,6 +17,12 @@ export default function Cart({ onClose, onCheckout }: CartProps) {
 
   const formatPrice = (priceInCentimes: number) => {
     return (priceInCentimes / 100).toFixed(2);
+  };
+
+  const buildItemKey = (item: CartItem) => {
+    const flavorKey = item.options?.flavorId || item.options?.flavor || '';
+    const partsKey = item.options?.parts ? String(item.options.parts) : '';
+    return `${item.id}-${flavorKey}-${partsKey}`;
   };
 
   const overlayVariants = {
@@ -116,7 +123,7 @@ export default function Cart({ onClose, onCheckout }: CartProps) {
             <AnimatePresence>
               {cart.map((item, index) => (
                 <motion.div
-                  key={item.id}
+                  key={buildItemKey(item)}
                   className={styles.cartItem}
                   variants={itemVariants}
                   initial="hidden"
@@ -132,8 +139,7 @@ export default function Cart({ onClose, onCheckout }: CartProps) {
                     <button
                       className={styles.quantityBtn}
                       onClick={() => {
-                        const itemKey = `${item.id}-${item.options?.flavor || ''}-${item.options?.parts || ''}`;
-                        updateQuantity(itemKey, item.quantity - 1);
+                        updateQuantity(buildItemKey(item), item.quantity - 1);
                       }}
                     >
                       −
@@ -142,8 +148,7 @@ export default function Cart({ onClose, onCheckout }: CartProps) {
                     <button
                       className={styles.quantityBtn}
                       onClick={() => {
-                        const itemKey = `${item.id}-${item.options?.flavor || ''}-${item.options?.parts || ''}`;
-                        updateQuantity(itemKey, item.quantity + 1);
+                        updateQuantity(buildItemKey(item), item.quantity + 1);
                       }}
                     >
                       +
@@ -151,8 +156,7 @@ export default function Cart({ onClose, onCheckout }: CartProps) {
                     <button
                       className={styles.removeBtn}
                       onClick={() => {
-                        const itemKey = `${item.id}-${item.options?.flavor || ''}-${item.options?.parts || ''}`;
-                        removeFromCart(itemKey);
+                        removeFromCart(buildItemKey(item));
                       }}
                       title="Supprimer"
                     >

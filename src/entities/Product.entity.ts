@@ -4,7 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { ProductFlavor } from './ProductFlavor.entity';
 
 @Entity('products')
 export class Product {
@@ -31,6 +33,9 @@ export class Product {
 
   @Column({ type: 'boolean', default: true })
   available!: boolean;
+
+  @OneToMany(() => ProductFlavor, (flavor) => flavor.product, { cascade: true })
+  flavors?: ProductFlavor[];
 
   @CreateDateColumn()
   created_at!: Date;

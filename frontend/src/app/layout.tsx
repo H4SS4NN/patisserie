@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Epilogue, Playfair_Display } from 'next/font/google';
 import { CartProvider } from '@/contexts/CartContext';
+import { SiteSettingsProvider } from '@/contexts/SiteSettingsContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CartModalManager from '@/components/CartModalManager';
@@ -20,7 +21,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'Assiqa - Pâtisserie Artisanale',
+  title: 'Assia - Pâtisserie Artisanale',
   description: 'Découvrez nos gâteaux artisanaux faits à la main avec passion',
 };
 
@@ -32,13 +33,15 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${epilogue.variable} ${playfair.variable}`}>
       <body>
-        <CartProvider>
-          <Header />
-          <main className="main-content">{children}</main>
-          <Footer />
-          <CartModalManager />
-          <ToasterWrapper />
-        </CartProvider>
+        <SiteSettingsProvider>
+          <CartProvider>
+            <Header />
+            <main className="main-content">{children}</main>
+            <Footer />
+            <CartModalManager />
+            <ToasterWrapper />
+          </CartProvider>
+        </SiteSettingsProvider>
       </body>
     </html>
   );

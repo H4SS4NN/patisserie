@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { adminLogout } from '@/lib/adminApi';
+import { useSiteSettings } from '@/contexts/SiteSettingsContext';
 import styles from './layout.module.scss';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -10,6 +11,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const {
+    settings: { adminBrandName },
+  } = useSiteSettings();
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -44,7 +48,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className={styles.adminLayout}>
       <nav className={styles.adminNav}>
         <div className={styles.navHeader}>
-          <h2>Assiqa Admin</h2>
+          <h2>{adminBrandName}</h2>
         </div>
         <div className={styles.navLinks}>
           <a
@@ -58,6 +62,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             className={pathname === '/admin/products' ? styles.active : ''}
           >
             Gâteaux
+          </a>
+          <a
+            href="/admin/content"
+            className={pathname.startsWith('/admin/content') ? styles.active : ''}
+          >
+            Contenus
           </a>
         </div>
         <div className={styles.navFooter}>

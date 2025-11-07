@@ -1,15 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Product } from '@/types';
+import { CartItemOptions, Product } from '@/types';
 import { getFlavorNamesForCategory, categoryHasParts } from '@/config/categories';
 import ProductOptionsModal from './ProductOptionsModal';
 import styles from './ProductCard.module.scss';
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart: (product: Product, options?: { flavor?: string; parts?: number }) => void;
+  onAddToCart: (product: Product, options?: CartItemOptions) => void;
   index?: number;
 }
 
@@ -17,7 +17,13 @@ export default function ProductCard({ product, onAddToCart, index = 0 }: Product
   const [showOptions, setShowOptions] = useState(false);
   // Le nom du produit est la catégorie (ex: "Flanc", "Cookies", "Layer cake")
   const category = product.name;
-  const flavorNames = getFlavorNamesForCategory(category);
+  const flavorNames = useMemo(() => {
+    if (product.flavors && product.flavors.length > 0) {
+      return product.flavors.map((flavor) => flavor.name);
+    }
+    return getFlavorNamesForCategory(category);
+  }, [product.flavors, category]);
+
   const hasParts = categoryHasParts(category);
   const hasOptions = flavorNames.length > 0 || hasParts;
 
@@ -33,7 +39,7 @@ export default function ProductCard({ product, onAddToCart, index = 0 }: Product
     }
   };
 
-  const handleAddWithOptions = (product: Product, options: { flavor?: string; parts?: number }) => {
+  const handleAddWithOptions = (product: Product, options: CartItemOptions = {}) => {
     onAddToCart(product, options);
   };
 

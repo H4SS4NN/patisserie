@@ -9,10 +9,16 @@ export interface Product {
   created_at?: string;
   updated_at?: string;
   options?: {
-    flavors?: string[];
     hasParts?: boolean;
     parts?: number[];
   };
+  flavors?: ProductFlavor[];
+}
+
+export interface ProductFlavor {
+  id: string;
+  name: string;
+  price_modifier?: number;
 }
 
 export interface ProductCategory {
@@ -22,16 +28,24 @@ export interface ProductCategory {
   parts?: number[];
 }
 
+export interface CartItemOptions {
+  flavorId?: string;
+  flavor?: string;
+  flavorPriceModifier?: number;
+  parts?: number;
+  basePrice?: number;
+}
+
 export interface CartItem extends Product {
   quantity: number;
-  options?: Record<string, any>;
+  options?: CartItemOptions;
 }
 
 export interface OrderItem {
   product_id: string; // UUID
   name: string;
   qty: number;
-  options?: Record<string, any>;
+  options?: CartItemOptions & Record<string, any>;
   price: number;
 }
 
@@ -76,5 +90,16 @@ export interface ApiResponse<T> {
   data?: T;
   error?: string;
   errors?: Array<{ msg: string; message?: string }>;
+}
+
+export interface PageContent<TContent = Record<string, any>> {
+  id: string;
+  slug: string;
+  title: string;
+  description?: string;
+  content?: TContent;
+  metadata?: Record<string, any>;
+  created_at?: string;
+  updated_at?: string;
 }
 

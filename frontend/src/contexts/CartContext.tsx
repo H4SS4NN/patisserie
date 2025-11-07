@@ -1,11 +1,11 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { CartItem, Product } from '@/types';
+import { CartItem, Product, CartItemOptions } from '@/types';
 
 interface CartContextType {
   cart: CartItem[];
-  addToCart: (product: Product, options?: { flavor?: string; parts?: number }) => void;
+  addToCart: (product: Product, options?: CartItemOptions) => void;
   removeFromCart: (itemKey: string) => void;
   updateQuantity: (itemKey: string, quantity: number) => void;
   clearCart: () => void;
@@ -35,28 +35,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (product: Product, options?: { flavor?: string; parts?: number }) => {
+  const buildItemKey = (productId: string, options?: CartItemOptions) => {
+    const flavorKey = options?.flavorId || options?.flavor || '';
+    const partsKey = options?.parts ? String(options.parts) : '';
+    return `${productId}-${flavorKey}-${partsKey}`;
+  };
+
+  const addToCart = (product: Product, options?: CartItemOptions) => {
     setCart((prevCart) => {
-      // Créer un ID unique basé sur le produit + options
-      const itemKey = `${product.id}-${options?.flavor || ''}-${options?.parts || ''}`;
-      
-      // Vérifier si un item identique existe déjà
-      const existingItem = prevCart.find((item) => {
-        const itemKeyExisting = `${item.id}-${item.options?.flavor || ''}-${item.options?.parts || ''}`;
-        return itemKeyExisting === itemKey;
-      });
+      const itemKey = buildItemKey(product.id, options);
+      const existingItem = prevCart.find((item) => buildItemKey(item.id, item.options) === itemKey);
 
       if (existingItem) {
         return prevCart.map((item) => {
-          const itemKeyExisting = `${item.id}-${item.options?.flavor || ''}-${item.options?.parts || ''}`;
-          if (itemKeyExisting === itemKey) {
+          if (buildItemKey(item.id, item.options) === itemKey) {
             return { ...item, quantity: item.quantity + 1 };
           }
           return item;
         });
       }
 
-      // Construire le nom avec les options
+      const flavorModifier = options?.flavorPriceModifier ?? 0;
+      const unitPrice = product.price + flavorModifier;
+
       let displayName = product.name;
       if (options?.flavor) {
         displayName = `${product.name} - ${options.flavor}`;
@@ -65,24 +66,29 @@ export function CartProvider({ children }: { children: ReactNode }) {
         displayName = `${displayName} (${options.parts} parts)`;
       }
 
+      const normalizedOptions: CartItemOptions | undefined = options
+        ? {
+            ...options,
+            flavorPriceModifier: flavorModifier,
+            basePrice: product.price,
+          }
+        : undefined;
+
       return [
         ...prevCart,
         {
           ...product,
           name: displayName,
+          price: unitPrice,
           quantity: 1,
-          options: options || {},
+          options: normalizedOptions,
         },
       ];
     });
   };
 
   const removeFromCart = (itemKey: string) => {
-    // itemKey est au format "productId-flavor-parts"
-    setCart((prevCart) => prevCart.filter((item) => {
-      const itemKeyExisting = `${item.id}-${item.options?.flavor || ''}-${item.options?.parts || ''}`;
-      return itemKeyExisting !== itemKey;
-    }));
+    setCart((prevCart) => prevCart.filter((item) => buildItemKey(item.id, item.options) !== itemKey));
   };
 
   const updateQuantity = (itemKey: string, quantity: number) => {
@@ -91,8 +97,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     } else {
       setCart((prevCart) =>
         prevCart.map((item) => {
-          const itemKeyExisting = `${item.id}-${item.options?.flavor || ''}-${item.options?.parts || ''}`;
-          if (itemKeyExisting === itemKey) {
+          if (buildItemKey(item.id, item.options) === itemKey) {
             return { ...item, quantity };
           }
           return item;

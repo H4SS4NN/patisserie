@@ -5,12 +5,16 @@ import { FaSearch } from 'react-icons/fa';
 import { getProducts } from '@/lib/api';
 import { Product } from '@/types';
 import { useCart } from '@/contexts/CartContext';
+import { useSiteSettings } from '@/contexts/SiteSettingsContext';
 import styles from './page.module.scss';
 
 export default function GalleryPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { addToCart } = useCart();
+  const {
+    settings: { brandName },
+  } = useSiteSettings();
 
   useEffect(() => {
     loadProducts();
@@ -32,7 +36,7 @@ export default function GalleryPage() {
   return (
     <main className={styles.galleryPage}>
       <div className={styles.galleryHero}>
-        <h1>Galerie Assiqa</h1>
+        <h1>Galerie {brandName}</h1>
         <p>Découvrez nos créations artisanales et nos chefs-d'œuvre de pâtisserie</p>
       </div>
 

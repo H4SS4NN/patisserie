@@ -53,9 +53,73 @@ export const updatePaymentStatusValidation = [
 export const createProductValidation = [
   body('name').trim().isLength({ min: 1, max: 255 }).withMessage('Product name required'),
   body('description').optional().trim(),
+  body('category').optional().trim().isLength({ min: 1, max: 100 }),
   body('price').isInt({ min: 0 }).withMessage('Price must be a positive integer'),
   body('options').optional().isObject(),
   body('image_url').optional().isURL().withMessage('Valid image URL required'),
   body('available').optional().isBoolean(),
+  body('flavors').optional().isArray(),
+  body('flavors.*.name')
+    .optional()
+    .trim()
+    .isLength({ min: 1, max: 255 })
+    .withMessage('Flavor name required'),
+  body('flavors.*.price_modifier')
+    .optional()
+    .isInt({ min: -100000, max: 100000 })
+    .withMessage('Flavor price modifier must be an integer')
+    .toInt(),
+];
+
+export const createFlavorValidation = [
+  body('name').trim().isLength({ min: 1, max: 255 }).withMessage('Flavor name required'),
+  body('price_modifier')
+    .optional()
+    .isInt({ min: -100000, max: 100000 })
+    .withMessage('Flavor price modifier must be an integer')
+    .toInt(),
+];
+
+export const updateFlavorValidation = [
+  body('name').optional().trim().isLength({ min: 1, max: 255 }).withMessage('Flavor name required'),
+  body('price_modifier')
+    .optional()
+    .isInt({ min: -100000, max: 100000 })
+    .withMessage('Flavor price modifier must be an integer')
+    .toInt(),
+];
+
+const isPlainObject = (value: unknown): value is Record<string, any> => {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+};
+
+function validateJsonField(field: string) {
+  return body(field)
+    .optional()
+    .custom((value) => {
+      if (!isPlainObject(value)) {
+        throw new Error(`${field} must be an object`);
+      }
+      return true;
+    });
+}
+
+export const createPageContentValidation = [
+  body('slug')
+    .trim()
+    .isLength({ min: 1, max: 150 })
+    .matches(/^[a-z0-9-]+$/)
+    .withMessage('Slug must be lowercase alphanumeric with dashes'),
+  body('title').trim().isLength({ min: 1, max: 255 }).withMessage('Page title required'),
+  body('description').optional().trim().isLength({ max: 5000 }),
+  validateJsonField('content'),
+  validateJsonField('metadata'),
+];
+
+export const updatePageContentValidation = [
+  body('title').optional().trim().isLength({ min: 1, max: 255 }).withMessage('Page title required'),
+  body('description').optional().trim().isLength({ max: 5000 }),
+  validateJsonField('content'),
+  validateJsonField('metadata'),
 ];
 

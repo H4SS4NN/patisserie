@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { getProducts } from '@/lib/api';
-import { Product } from '@/types';
+import { getProducts, getPageContent } from '@/lib/api';
+import { Product, PageContent } from '@/types';
 import { useCart } from '@/contexts/CartContext';
 import { CATEGORY_NAMES } from '@/config/categories';
 import ProductGrid from '@/components/ProductGrid';
@@ -14,10 +14,18 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState('Tous');
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [homeContent, setHomeContent] = useState<{ heroTitle: string; heroSubtitle: string }>(
+    () => ({
+      heroTitle: 'Découvrez Nos Gâteaux',
+      heroSubtitle:
+        'Fabriqués à la main avec passion par Assia, des recettes classiques aux créations sur mesure.',
+    })
+  );
   const { addToCart } = useCart();
 
   useEffect(() => {
     loadProducts();
+    loadHomeContent();
   }, []);
 
   useEffect(() => {
@@ -27,10 +35,23 @@ export default function HomePage() {
   const loadProducts = async () => {
     try {
       const data = await getProducts();
-      console.log('Products loaded:', data);
       setProducts(data);
     } catch (error) {
       console.error('Error loading products:', error);
+    }
+  };
+
+  const loadHomeContent = async () => {
+    try {
+      const page = await getPageContent<{ heroTitle?: string; heroSubtitle?: string }>('home');
+      if (page.content) {
+        setHomeContent((prev) => ({
+          heroTitle: page.content?.heroTitle?.trim() || prev.heroTitle,
+          heroSubtitle: page.content?.heroSubtitle?.trim() || prev.heroSubtitle,
+        }));
+      }
+    } catch (error) {
+      console.error('Error loading home content:', error);
     }
   };
 
@@ -56,11 +77,8 @@ export default function HomePage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        <h1>Découvrez Nos Gâteaux</h1>
-        <p>
-          Fabriqués à la main avec passion par Assiqa, des recettes classiques aux créations sur
-          mesure.
-        </p>
+        <h1>{homeContent.heroTitle}</h1>
+        <p>{homeContent.heroSubtitle}</p>
       </motion.div>
 
       <motion.div

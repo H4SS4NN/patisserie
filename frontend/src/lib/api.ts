@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Product, Order, ApiResponse } from '@/types';
+import { Product, Order, ApiResponse, PageContent } from '@/types';
 
 // Utiliser /api comme préfixe pour que Nginx route vers le backend
 const API_BASE_URL = typeof window !== 'undefined' 
@@ -46,6 +46,16 @@ export const getProductById = async (id: string): Promise<Product> => {
     return response.data.product;
   } catch (error) {
     console.error('Error fetching product:', error);
+    throw error;
+  }
+};
+
+export const getPageContent = async <T = Record<string, any>>(slug: string): Promise<PageContent<T>> => {
+  try {
+    const response = await api.get<{ page: PageContent<T> }>(`/content/${slug}`);
+    return response.data.page;
+  } catch (error) {
+    console.error('Error fetching page content:', error);
     throw error;
   }
 };

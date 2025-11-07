@@ -1,12 +1,3 @@
-:global(:root) {
-  --border-color: rgba(255, 255, 255, 0.08);
-  --bg-panel: rgba(255, 255, 255, 0.04);
-  --bg-sidebar: rgba(255, 255, 255, 0.02);
-  --accent: #f5a623;
-  --error: #ff6b6b;
-  --success: #2ecc71;
-}
-
 .container {
   display: flex;
   gap: 2rem;

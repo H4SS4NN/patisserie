@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
 
+:root {
+  --border-color: rgba(255, 255, 255, 0.08);
+  --bg-panel: rgba(255, 255, 255, 0.04);
+  --bg-sidebar: rgba(255, 255, 255, 0.02);
+  --accent: #f5a623;
+  --error: #ff6b6b;
+  --success: #2ecc71;
+}
+
 * {
   margin: 0;
   padding: 0;

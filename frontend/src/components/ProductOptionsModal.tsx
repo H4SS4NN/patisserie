@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CartItemOptions, Product } from '@/types';
@@ -30,6 +30,8 @@ export default function ProductOptionsModal({
   const [selectedFlavorModifier, setSelectedFlavorModifier] = useState<number>(0);
   const [selectedParts, setSelectedParts] = useState<number | undefined>(undefined);
   const [mounted, setMounted] = useState(false);
+  const flavorInitProductIdRef = useRef<string | null>(null);
+  const partsInitProductIdRef = useRef<string | null>(null);
   
   // La catégorie est le nom du produit (ex: "Flanc", "Cookies", "Layer cake")
   const category = product.name;
@@ -59,23 +61,51 @@ export default function ProductOptionsModal({
   const selectedFlavorImage = selectedFlavorOption?.image || product.image_url || null;
 
   useEffect(() => {
-    if (flavorOptions.length > 0) {
-      const defaultFlavor = flavorOptions[0];
-      setSelectedFlavor(defaultFlavor.name);
-      setSelectedFlavorId(defaultFlavor.id);
-      setSelectedFlavorModifier(defaultFlavor.priceModifier ?? 0);
-    } else {
+    const isNewProduct = flavorInitProductIdRef.current !== product.id;
+    flavorInitProductIdRef.current = product.id;
+
+    if (flavorOptions.length === 0) {
       setSelectedFlavor('');
       setSelectedFlavorId(undefined);
       setSelectedFlavorModifier(0);
+      return;
     }
 
-    if (hasParts && parts.length > 0) {
-      setSelectedParts(parts[0]);
-    } else {
+    setSelectedFlavor((previousFlavor) => {
+      let nextFlavorOption: FlavorOptionDisplay | undefined;
+
+      if (!isNewProduct) {
+        nextFlavorOption = flavorOptions.find((option) => option.name === previousFlavor);
+      }
+
+      if (!nextFlavorOption) {
+        nextFlavorOption = flavorOptions[0];
+      }
+
+      setSelectedFlavorId(nextFlavorOption.id);
+      setSelectedFlavorModifier(nextFlavorOption.priceModifier ?? 0);
+
+      return nextFlavorOption.name;
+    });
+  }, [product.id, flavorOptions]);
+
+  useEffect(() => {
+    const isNewProduct = partsInitProductIdRef.current !== product.id;
+    partsInitProductIdRef.current = product.id;
+
+    if (!hasParts || parts.length === 0) {
       setSelectedParts(undefined);
+      return;
     }
-  }, [product.id, flavorOptions, hasParts, parts]);
+
+    setSelectedParts((previousParts) => {
+      if (!isNewProduct && previousParts && parts.includes(previousParts)) {
+        return previousParts;
+      }
+
+      return parts[0];
+    });
+  }, [product.id, hasParts, parts]);
 
   // Gérer le montage et le démontage
   useEffect(() => {

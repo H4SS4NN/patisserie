@@ -16,7 +16,7 @@ export interface Product {
 }
 
 export interface ProductFlavor {
-  id: string;
+  id?: string;
   name: string;
   price_modifier?: number;
 }

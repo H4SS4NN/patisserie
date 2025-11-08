@@ -3,14 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import {
-  getProducts,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-} from '@/lib/adminApi';
+import { getProducts, createProduct, updateProduct, deleteProduct } from '@/lib/adminApi';
 import { Product } from '@/types';
-import { CATEGORY_NAMES } from '@/config/categories';
+import { getFlavorsForCategory } from '@/config/categories';
 import { FaPlus, FaEdit, FaTrash, FaSync, FaMagic } from 'react-icons/fa';
 import { showSuccess, showError } from '@/lib/toast';
 import ProductModal from '@/components/admin/ProductModal';
@@ -162,6 +157,14 @@ export default function ProductsPage() {
     return (priceInCentimes / 100).toFixed(2);
   };
 
+  const formatFlavorModifier = (modifier?: number) => {
+    if (!modifier) {
+      return 'Inclus';
+    }
+    const sign = modifier > 0 ? '+' : '';
+    return `${sign}${(modifier / 100).toFixed(2)}€`;
+  };
+
   return (
     <div className={styles.productsPage}>
       <div className={styles.pageHeader}>
@@ -215,64 +218,99 @@ export default function ProductsPage() {
         </div>
       ) : (
         <div className={styles.productsGrid}>
-          {products.map((product, index) => (
-            <motion.div
-              key={product.id}
-              className={styles.productCard}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05 }}
-            >
-              <div className={styles.productImage}>
-                {product.image_url ? (
-                  <img src={product.image_url} alt={product.name} />
-                ) : (
-                  <div className={styles.placeholderImage}>
-                    <span>Pas d'image</span>
+          {products.map((product, index) => {
+            const fallbackFlavors = getFlavorsForCategory(product.name);
+            const hasCustomFlavors = Boolean(product.flavors && product.flavors.length > 0);
+
+            return (
+              <motion.div
+                key={product.id}
+                className={styles.productCard}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <div className={styles.productImage}>
+                  {product.image_url ? (
+                    <img src={product.image_url} alt={product.name} />
+                  ) : (
+                    <div className={styles.placeholderImage}>
+                      <span>Pas d'image</span>
+                    </div>
+                  )}
+                  {!product.available && (
+                    <div className={styles.unavailableBadge}>Indisponible</div>
+                  )}
+                </div>
+                <div className={styles.productInfo}>
+                  <h3>{product.name}</h3>
+                  {product.description && (
+                    <p className={styles.description}>{product.description}</p>
+                  )}
+                  <div className={styles.productMeta}>
+                    <span className={styles.price}>{formatPrice(product.price)}€</span>
+                    <span
+                      className={`${styles.availableBadge} ${
+                        product.available ? styles.available : styles.unavailable
+                      }`}
+                    >
+                      {product.available ? 'Disponible' : 'Indisponible'}
+                    </span>
                   </div>
-                )}
-                {!product.available && (
-                  <div className={styles.unavailableBadge}>Indisponible</div>
-                )}
-              </div>
-              <div className={styles.productInfo}>
-                <h3>{product.name}</h3>
-                {product.description && (
-                  <p className={styles.description}>{product.description}</p>
-                )}
-                <div className={styles.productMeta}>
-                  <span className={styles.price}>{formatPrice(product.price)}€</span>
-                  <span
-                    className={`${styles.availableBadge} ${
-                      product.available ? styles.available : styles.unavailable
-                    }`}
-                  >
-                    {product.available ? 'Disponible' : 'Indisponible'}
-                  </span>
+                  <div className={styles.productActions}>
+                    <motion.button
+                      className={styles.editButton}
+                      onClick={() => handleEdit(product)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <FaEdit />
+                      Modifier
+                    </motion.button>
+                    <motion.button
+                      className={styles.deleteButton}
+                      onClick={() => handleDelete(product.id as string)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <FaTrash />
+                      Supprimer
+                    </motion.button>
+                  </div>
+                  <div className={styles.flavorsSection}>
+                    <span className={styles.flavorsTitle}>Goûts disponibles</span>
+                    {hasCustomFlavors ? (
+                      <ul className={styles.flavorsList}>
+                        {product.flavors!.map((flavor) => (
+                          <li key={flavor.id || flavor.name} className={styles.flavorItem}>
+                            <span>{flavor.name}</span>
+                            <span className={styles.flavorPrice}>
+                              {formatFlavorModifier(flavor.price_modifier)}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : fallbackFlavors.length > 0 ? (
+                      <>
+                        <p className={styles.flavorsFallbackText}>
+                          Utilise la configuration standard ({fallbackFlavors.length} goûts) :
+                        </p>
+                        <ul className={styles.flavorsFallbackList}>
+                          {fallbackFlavors.map((flavor) => (
+                            <li key={flavor.name}>{flavor.name}</li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : (
+                      <p className={styles.flavorsFallbackText}>
+                        Aucun goût personnalisé. Ajoutez-en pour proposer des choix spécifiques.
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <div className={styles.productActions}>
-                  <motion.button
-                    className={styles.editButton}
-                    onClick={() => handleEdit(product)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <FaEdit />
-                    Modifier
-                  </motion.button>
-                  <motion.button
-                    className={styles.deleteButton}
-                    onClick={() => handleDelete(product.id as string)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <FaTrash />
-                    Supprimer
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       )}
 

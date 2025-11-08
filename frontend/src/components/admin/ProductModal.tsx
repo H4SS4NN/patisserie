@@ -1,15 +1,21 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Product } from '@/types';
-import { CATEGORY_NAMES } from '@/config/categories';
+import { CATEGORY_NAMES, getFlavorsForCategory } from '@/config/categories';
 import styles from './ProductModal.module.scss';
 
 interface ProductModalProps {
   product: Product | null;
   onClose: () => void;
   onSave: (productData: Partial<Product>) => Promise<void>;
+}
+
+interface FlavorFormState {
+  id?: string;
+  name: string;
+  priceModifier: string;
 }
 
 export default function ProductModal({ product, onClose, onSave }: ProductModalProps) {
@@ -20,11 +26,14 @@ export default function ProductModal({ product, onClose, onSave }: ProductModalP
     image_url: '',
     available: true,
   });
+  const [isCustomName, setIsCustomName] = useState(false);
+  const [flavors, setFlavors] = useState<FlavorFormState[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     if (product) {
+      const presetCategory = CATEGORY_NAMES.includes(product.name);
       setFormData({
         name: product.name || '',
         description: product.description || '',
@@ -32,6 +41,17 @@ export default function ProductModal({ product, onClose, onSave }: ProductModalP
         image_url: product.image_url || '',
         available: product.available !== undefined ? product.available : true,
       });
+      setIsCustomName(!presetCategory);
+      setFlavors(
+        (product.flavors || []).map((flavor) => ({
+          id: flavor.id,
+          name: flavor.name,
+          priceModifier:
+            typeof flavor.price_modifier === 'number'
+              ? (flavor.price_modifier / 100).toFixed(2)
+              : '0.00',
+        }))
+      );
     } else {
       setFormData({
         name: '',
@@ -40,6 +60,8 @@ export default function ProductModal({ product, onClose, onSave }: ProductModalP
         image_url: '',
         available: true,
       });
+      setIsCustomName(false);
+      setFlavors([]);
     }
   }, [product]);
 
@@ -54,6 +76,100 @@ export default function ProductModal({ product, onClose, onSave }: ProductModalP
     });
   };
 
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+
+    if (value === '__custom__') {
+      setIsCustomName(true);
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.name || '',
+      }));
+      return;
+    }
+
+    setIsCustomName(false);
+    setFormData((prev) => ({
+      ...prev,
+      name: value,
+    }));
+
+    const defaultFlavors = getFlavorsForCategory(value);
+    if (defaultFlavors.length > 0 && flavors.length === 0) {
+      setFlavors(
+        defaultFlavors.map((flavor) => ({
+          name: flavor.name,
+          priceModifier: '0.00',
+        }))
+      );
+    }
+  };
+
+  const handleCustomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      name: value,
+    }));
+  };
+
+  const addFlavor = () => {
+    setFlavors((prev) => [
+      ...prev,
+      {
+        name: '',
+        priceModifier: '0.00',
+      },
+    ]);
+  };
+
+  const updateFlavor = (index: number, field: 'name' | 'priceModifier', value: string) => {
+    setFlavors((prev) =>
+      prev.map((flavor, i) =>
+        i === index
+          ? {
+              ...flavor,
+              [field]: value,
+            }
+          : flavor
+      )
+    );
+  };
+
+  const removeFlavor = (index: number) => {
+    setFlavors((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const defaultCategoryFlavors = useMemo(() => {
+    if (!isCustomName && formData.name) {
+      return getFlavorsForCategory(formData.name);
+    }
+    return [];
+  }, [formData.name, isCustomName]);
+
+  const handlePrefillFlavors = () => {
+    if (defaultCategoryFlavors.length === 0) {
+      return;
+    }
+
+    if (
+      flavors.length > 0 &&
+      typeof window !== 'undefined' &&
+      !window.confirm(
+        'Remplacer les goûts existants par la liste par défaut ? Cette action est irréversible.'
+      )
+    ) {
+      return;
+    }
+
+    setFlavors(
+      defaultCategoryFlavors.map((flavor) => ({
+        name: flavor.name,
+        priceModifier: '0.00',
+      }))
+    );
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -61,22 +177,45 @@ export default function ProductModal({ product, onClose, onSave }: ProductModalP
 
     try {
       // Validation
-      if (!formData.name.trim()) {
+      const trimmedName = formData.name.trim();
+      if (!trimmedName) {
         throw new Error('Le nom est requis');
       }
-      if (!formData.price || parseFloat(formData.price) <= 0) {
+      const normalizedPrice = Number.parseFloat(formData.price.replace(',', '.'));
+      if (!formData.price || Number.isNaN(normalizedPrice) || normalizedPrice <= 0) {
         throw new Error('Le prix doit être supérieur à 0');
       }
 
-      // Convertir le prix en centimes
-      const priceInCentimes = Math.round(parseFloat(formData.price) * 100);
+      const priceInCentimes = Math.round(normalizedPrice * 100);
+
+      const formattedFlavors = flavors.map((flavor, index) => {
+        const flavorName = flavor.name.trim();
+
+        if (!flavorName) {
+          throw new Error(`Le nom du goût ${index + 1} est requis`);
+        }
+
+        const modifierValue = flavor.priceModifier.trim();
+        const parsedModifier =
+          modifierValue === '' ? 0 : Number.parseFloat(modifierValue.replace(',', '.'));
+
+        if (Number.isNaN(parsedModifier)) {
+          throw new Error(`Le prix du goût ${flavorName} est invalide`);
+        }
+
+        return {
+          name: flavorName,
+          price_modifier: Math.round(parsedModifier * 100),
+        };
+      });
 
       await onSave({
-        name: formData.name.trim(),
+        name: trimmedName,
         description: formData.description.trim() || undefined,
         price: priceInCentimes,
         image_url: formData.image_url.trim() || undefined,
         available: formData.available,
+        flavors: formattedFlavors,
       });
     } catch (err: any) {
       setError(err.message || 'Erreur lors de la sauvegarde');
@@ -146,8 +285,8 @@ export default function ProductModal({ product, onClose, onSave }: ProductModalP
               <select
                 id="name"
                 name="name"
-                value={formData.name}
-                onChange={handleChange}
+                value={isCustomName ? '__custom__' : formData.name}
+                onChange={handleCategoryChange}
                 className={styles.select}
                 required
               >
@@ -157,7 +296,19 @@ export default function ProductModal({ product, onClose, onSave }: ProductModalP
                     {cat}
                   </option>
                 ))}
+                <option value="__custom__">Autre (personnalisé)</option>
               </select>
+              {isCustomName && (
+                <input
+                  type="text"
+                  name="customName"
+                  value={formData.name}
+                  onChange={handleCustomNameChange}
+                  placeholder="Nom du gâteau"
+                  className={styles.customNameInput}
+                  required
+                />
+              )}
               <p className={styles.helpText}>
                 Le client choisira ensuite le goût lors de l'ajout au panier.
                 {formData.name === 'Layer cake' && ' Le nombre de parts sera également demandé.'}
@@ -226,6 +377,78 @@ export default function ProductModal({ product, onClose, onSave }: ProductModalP
                   <img src={formData.image_url} alt="Preview" />
                 </div>
               )}
+            </div>
+
+            <div className={styles.formGroup}>
+              <div className={styles.flavorsHeader}>
+                <div>
+                  <label>Goûts disponibles</label>
+                  <p className={styles.helpText}>
+                    Ajoutez les goûts proposés et précisez un supplément éventuel. Laissez 0.00€
+                    si le goût est inclus dans le prix de base.
+                  </p>
+                </div>
+                {defaultCategoryFlavors.length > 0 && (
+                  <button
+                    type="button"
+                    className={styles.prefillButton}
+                    onClick={handlePrefillFlavors}
+                  >
+                    Utiliser les goûts par défaut
+                  </button>
+                )}
+              </div>
+
+              <div className={styles.flavorList}>
+                {flavors.length === 0 && (
+                  <div className={styles.flavorsEmpty}>
+                    Aucun goût ajouté pour le moment. Cliquez sur « Ajouter un goût » pour commencer.
+                  </div>
+                )}
+                {flavors.map((flavor, index) => (
+                  <div key={index} className={styles.flavorRow}>
+                    <div className={styles.flavorInput}>
+                      <label className={styles.srOnly} htmlFor={`flavor-name-${index}`}>
+                        Nom du goût
+                      </label>
+                      <input
+                        id={`flavor-name-${index}`}
+                        type="text"
+                        value={flavor.name}
+                        onChange={(event) => updateFlavor(index, 'name', event.target.value)}
+                        placeholder="Ex : Pistache"
+                        required
+                      />
+                    </div>
+                    <div className={styles.flavorPriceInput}>
+                      <label className={styles.srOnly} htmlFor={`flavor-price-${index}`}>
+                        Supplément (en €)
+                      </label>
+                      <span>€</span>
+                      <input
+                        id={`flavor-price-${index}`}
+                        type="number"
+                        inputMode="decimal"
+                        step="0.01"
+                        value={flavor.priceModifier}
+                        onChange={(event) => updateFlavor(index, 'priceModifier', event.target.value)}
+                        placeholder="0.00"
+                      />
+                    </div>
+                    <button
+                      type="button"
+                      className={styles.removeFlavorButton}
+                      onClick={() => removeFlavor(index)}
+                    >
+                      Supprimer
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              <button type="button" className={styles.addFlavorButton} onClick={addFlavor}>
+                Ajouter un goût
+              </button>
             </div>
 
             {error && <div className={styles.errorMessage}>{error}</div>}

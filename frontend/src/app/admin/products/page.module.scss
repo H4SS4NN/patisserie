@@ -207,6 +207,60 @@
   margin-top: 1rem;
 }
 
+.flavorsSection {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.flavorsTitle {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #4e4441;
+}
+
+.flavorsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.flavorItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fdf2f3;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  color: #4e4441;
+  font-size: 0.875rem;
+}
+
+.flavorPrice {
+  font-weight: 600;
+  color: #ee2b5b;
+}
+
+.flavorsFallbackText {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6b5e5a;
+}
+
+.flavorsFallbackList {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: #6b5e5a;
+  font-size: 0.85rem;
+}
+
 .editButton,
 .deleteButton {
   flex: 1;

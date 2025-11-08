@@ -140,6 +140,134 @@
   cursor: pointer;
 }
 
+.customNameInput {
+  margin-top: 0.5rem;
+}
+
+.flavorsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.prefillButton {
+  align-self: center;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #fadadd;
+  color: #4e4441;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.75rem;
+
+  &:hover {
+    background: #f5c4c9;
+  }
+}
+
+.flavorList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.flavorsEmpty {
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px dashed #f5c4c9;
+  background: #fff5f6;
+  color: #6b5e5a;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.flavorRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.flavorInput {
+  display: flex;
+  flex-direction: column;
+}
+
+.flavorPriceInput {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.5rem;
+  border: 1px solid #fadadd;
+  border-radius: 0.5rem;
+  background: white;
+
+  span {
+    color: #6b5e5a;
+    font-weight: 600;
+  }
+
+  input {
+    border: none;
+    padding: 0.75rem 0.25rem;
+    font-size: 1rem;
+    width: 100%;
+    text-align: right;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.removeFlavorButton {
+  border: none;
+  border-radius: 0.5rem;
+  background: #fee;
+  color: #c33;
+  font-weight: 600;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.75rem;
+
+  &:hover {
+    background: #fcc;
+  }
+}
+
+.addFlavorButton {
+  align-self: flex-start;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: #ee2b5b;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 0.875rem;
+
+  &:hover {
+    background: #d81f4a;
+  }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
 .imagePreview {
   margin-top: 0.5rem;
   border-radius: 0.5rem;
@@ -210,6 +338,27 @@
 @media (max-width: 768px) {
   .modalContent {
     max-height: 95vh;
+  }
+
+  .flavorsHeader {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .prefillButton {
+    width: 100%;
+  }
+
+  .flavorRow {
+    grid-template-columns: 1fr;
+  }
+
+  .removeFlavorButton {
+    width: 100%;
+  }
+
+  .addFlavorButton {
+    width: 100%;
   }
 
   .formRow {
